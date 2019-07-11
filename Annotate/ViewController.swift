@@ -63,12 +63,16 @@ class ViewController: UITableViewController {
         let cell = tableView.cellForRow(at: indexPath)
         guard let name = cell?.textLabel?.text else {return}
         fetchObjectDetectionSets(NSPredicate(format: "name == %@", name))
-        print(trainingSetResultsController.fetchedObjects?.first)
-        let viewController = TrainingSetVC(collectionViewLayout: UICollectionViewFlowLayout())
+        pushController()
+    }
+    
+    func pushController() {
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.itemSize = CGSize(width: 200, height: 200)
+        let viewController = TrainingSetVC(collectionViewLayout: flowLayout)
         viewController.trainingSet = trainingSetResultsController.fetchedObjects?.first
         navigationController?.pushViewController(viewController, animated: true)
     }
-    
 
     
     @objc func addSetAlert(){

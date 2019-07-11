@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -23,6 +23,7 @@
 		630B414822D4E88B00BF1A07 /* JSONStructs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630B414722D4E88B00BF1A07 /* JSONStructs.swift */; };
 		630B414A22D4E94100BF1A07 /* ErrorEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630B414922D4E94100BF1A07 /* ErrorEnum.swift */; };
 		630B414C22D4F55500BF1A07 /* EditorVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630B414B22D4F55500BF1A07 /* EditorVC.swift */; };
+		630B414E22D6545600BF1A07 /* CoreDataExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630B414D22D6545600BF1A07 /* CoreDataExtensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,6 +44,7 @@
 		630B414722D4E88B00BF1A07 /* JSONStructs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONStructs.swift; sourceTree = "<group>"; };
 		630B414922D4E94100BF1A07 /* ErrorEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorEnum.swift; sourceTree = "<group>"; };
 		630B414B22D4F55500BF1A07 /* EditorVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorVC.swift; sourceTree = "<group>"; };
+		630B414D22D6545600BF1A07 /* CoreDataExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataExtensions.swift; sourceTree = "<group>"; };
 		6EE0653FD45BA58F4D051E8C /* Pods-Annotate.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Annotate.release.xcconfig"; path = "Target Support Files/Pods-Annotate/Pods-Annotate.release.xcconfig"; sourceTree = "<group>"; };
 		C02C6CF19E911DC6C183869A /* Pods-Annotate.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Annotate.debug.xcconfig"; path = "Target Support Files/Pods-Annotate/Pods-Annotate.debug.xcconfig"; sourceTree = "<group>"; };
 		D3D1484330CD33435D62B8B7 /* Pods_Annotate.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Annotate.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -97,6 +99,7 @@
 				630B414722D4E88B00BF1A07 /* JSONStructs.swift */,
 				630B414522D4E7D200BF1A07 /* Constants.swift */,
 				630B414922D4E94100BF1A07 /* ErrorEnum.swift */,
+				630B414D22D6545600BF1A07 /* CoreDataExtensions.swift */,
 			);
 			path = Annotate;
 			sourceTree = "<group>";
@@ -115,7 +118,6 @@
 				C02C6CF19E911DC6C183869A /* Pods-Annotate.debug.xcconfig */,
 				6EE0653FD45BA58F4D051E8C /* Pods-Annotate.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -241,6 +243,7 @@
 				630B414822D4E88B00BF1A07 /* JSONStructs.swift in Sources */,
 				630B414C22D4F55500BF1A07 /* EditorVC.swift in Sources */,
 				630B414422D4E64300BF1A07 /* NetworkUtil.swift in Sources */,
+				630B414E22D6545600BF1A07 /* CoreDataExtensions.swift in Sources */,
 				630B414A22D4E94100BF1A07 /* ErrorEnum.swift in Sources */,
 				1BEC563122D25DC1001FDD65 /* DataController.swift in Sources */,
 				1BEC562422D1902F001FDD65 /* Annotate.xcdatamodeld in Sources */,

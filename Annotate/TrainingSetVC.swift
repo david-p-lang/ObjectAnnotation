@@ -12,13 +12,14 @@ import CoreData
 class TrainingSetVC: UICollectionViewController {
     
     var trainingSet: TrainingSet!
+    var photoArray = [Photo]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
     
         self.collectionView.register(TrainingSetCell.self, forCellWithReuseIdentifier: "Cell")
         print(UIImage(named: "placeholder"))
-        self.navigationItem.title = "Set Content"
+        self.navigationItem.title = trainingSet.name ?? "Set Content"
         
         let searchButton = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(TrainingSetVC.addPhoto))
         let mediaButton = UIBarButtonItem(barButtonSystemItem: .camera, target: self, action: #selector(TrainingSetVC.addPhoto))
@@ -36,6 +37,9 @@ class TrainingSetVC: UICollectionViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         fetchSetPhotos()
+        let photoSet = trainingSet.photo as? Set<Photo>
+        photoArray = Array(photoSet!)
+        
     }
     
     func fetchSetPhotos() {
@@ -60,11 +64,23 @@ class TrainingSetVC: UICollectionViewController {
         //cell..image = UIImage(named: "placeholder")
         //cell.backgroundColor = UIColor.red
         cell.nameLabel.text = "hi"
-        cell.imageView.image = UIImage(named: "placeholder")
+        cell.imageView.image = UIImage(data: photoArray[indexPath.row].data!)
         return cell
     }
 
+    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize
+    {
+        let width = (UIScreen.main.bounds.width - 16)/3
+        return CGSize(width: width, height: width)
+    }
     
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
+        return 1;
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat {
+        return 1;
+    }
     
 
 }

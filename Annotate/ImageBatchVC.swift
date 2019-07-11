@@ -24,7 +24,7 @@ class ImageBatchVC: UICollectionViewController {
         let searchAction = UIAlertAction(title: "Search", style: .default, handler: {(action) in
             guard let text = alert.textFields?[0].text else {return}
             self.search(text)
-            print("search for text")
+            print("search for text", text)
         })
         let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         alert.addAction(searchAction)
@@ -45,13 +45,7 @@ class ImageBatchVC: UICollectionViewController {
     }
 
     func search(_ term: String) {
-//        guard let entity = NSEntityDescription.entity(forEntityName: "Tag", in: DataController.shared.mainContext) else {return}
-//        let tag = Tag(entity: entity, insertInto: DataController.shared.mainContext)
-//        tag.name = searchTextfield.text
-//        tagString = tag.name!
-//        try? DataController.shared.mainContext.save()
-//
-//        storedTagWith(name: tag.name!)
+
         
         NetworkUtil.requestImageResources(tag: term, pageNumber: 0) { (flickrSearchResult, error) in
             guard error == nil, let flickrSearchResult = flickrSearchResult else {
@@ -61,9 +55,7 @@ class ImageBatchVC: UICollectionViewController {
             self.flickrSearchResult = flickrSearchResult
             print(self.flickrSearchResult?.photos?.photo)
             self.setFlickrUrls()
-//            DispatchQueue.main.async {
-//               //self.navigationController?.pushViewController(<#T##viewController: UIViewController##UIViewController#>, animated: <#T##Bool#>)
-//            }
+
         }
     }
     
@@ -81,19 +73,6 @@ class ImageBatchVC: UICollectionViewController {
             self.collectionView.reloadData()
         }
     }
-    
-    
-//    let vC = ImageBatchVC(collectionViewLayout: UICollectionViewFlowLayout())
-//    vC.trainingSet = trainingSetResultsController.fetchedObjects?.first
-//    navigationController?.pushViewController(viewController, animated: true)
-    
-    // MARK: UICollectionViewDataSource
-
-//    override func numberOfSections(in collectionView: UICollectionView) -> Int {
-//        // #warning Incomplete implementation, return the number of sections
-//        return 0
-//    }
-
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of items
@@ -133,36 +112,7 @@ class ImageBatchVC: UICollectionViewController {
     }
 
 
-    // MARK: UICollectionViewDelegate
 
-    /*
-    // Uncomment this method to specify if the specified item should be highlighted during tracking
-    override func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    */
-
-    /*
-    // Uncomment this method to specify if the specified item should be selected
-    override func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    */
-
-    /*
-    // Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
-    override func collectionView(_ collectionView: UICollectionView, shouldShowMenuForItemAt indexPath: IndexPath) -> Bool {
-        return false
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, canPerformAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) -> Bool {
-        return false
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, performAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) {
-    
-    }
-    */
 
 }
 

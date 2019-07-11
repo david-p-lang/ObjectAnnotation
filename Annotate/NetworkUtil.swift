@@ -31,10 +31,11 @@ class NetworkUtil {
     
     /// Create a URLComponent and array of query items and return URL from the component as an optional
     class func buildTagQuery(_ tag: String, pageNumber: Int = 0) -> URL? {
-        let queryItemTag = URLQueryItem(name: "tag", value: tag)
+        let queryItemTag = URLQueryItem(name: "tags", value: tag)
+        let queryItemText = URLQueryItem(name: "text", value: tag)
         let queryItemPerPage = URLQueryItem(name: "per_page", value: Constants.perPage)
         let queryItemPage = URLQueryItem(name: "page", value: "\(pageNumber)")
-        let queryItemMethod = URLQueryItem(name: "method", value: "flickr.photos.getRecent")
+        let queryItemMethod = URLQueryItem(name: "method", value: "flickr.photos.search")
         let queryItemAPIKey = URLQueryItem(name: "api_key", value: Constants.apiKey)
         let queryItemFormat = URLQueryItem(name: "format", value: Constants.responseFormat)
         let queryItemCallback = URLQueryItem(name: "nojsoncallback", value: "1")
@@ -42,8 +43,8 @@ class NetworkUtil {
         components.scheme = "https"
         components.host = "api.flickr.com"
         components.path = "/services/rest"
-        components.queryItems = [queryItemMethod, queryItemAPIKey, queryItemTag, queryItemFormat, queryItemPerPage, queryItemPage, queryItemCallback]
-        print(components.string)
+        components.queryItems = [queryItemMethod, queryItemAPIKey, queryItemTag, queryItemText, queryItemFormat, queryItemPerPage, queryItemPage, queryItemCallback]
+        print("compon", components.string)
         return components.url
     }
     
@@ -84,7 +85,7 @@ class NetworkUtil {
     class func buildImageUrlString(_ flickrUrl: FlickrUrl) -> URL? {
         var components = URLComponents()
         let host = "farm" + String(flickrUrl.farm) + ".staticflickr.com"
-        let path = "/\(flickrUrl.server)/\(flickrUrl.id)_\(flickrUrl.secret)_m.jpg"
+        let path = "/\(flickrUrl.server)/\(flickrUrl.id)_\(flickrUrl.secret)_c.jpg"
         components.scheme = "https"
         components.host = host
         components.path = path

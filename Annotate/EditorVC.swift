@@ -7,8 +7,7 @@
 //
 
 import UIKit
-
-import UIKit
+import CoreData
 
 
 struct ImageInfo : Codable {
@@ -28,10 +27,93 @@ struct Coordinates: Codable {
     let height: Int
 }
 
+struct AnnotationSet: Codable {
+    let fileName: String
+    let annotatedImages: [AnnotatedImage]
+}
+
+struct AnnotatedImage : Codable {
+    let name: String
+    let label: String
+    let x: Int
+    let y: Int
+    let width: Int
+    let height: Int
+}
+
+extension AnnotatedImage {
+    enum CodingKeys: String, CodingKey {
+        case name
+        case label
+        case x
+        case y
+        case width
+        case height
+    }
+}
+
+struct AnnotationStore {
+    
+    static func encodeAnnotation(annotationImageSet: AnnotationSet) {
+        
+        let setAnnotationEncoder = JSONEncoder()
+        do {
+            let imageData = try setAnnotationEncoder.encode(annotationImageSet)
+            print(String(data: imageData, encoding: .utf8))
+            writeFile(data: imageData, fileName: annotationImageSet.fileName)
+        } catch {
+            print("error encoding ")
+        }
+    }
+    
+    static func writeFile(data: Data, fileName: String) {
+        let path = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        print(path)
+        let url = path[0].appendingPathComponent(fileName + ".json")
+        do {
+            try data.write(to: url)
+        } catch {
+            print("error writing to url path")
+        }
+    }
+    
+    static func saveArchive(annotatedImages: [AnnotatedImage], key: String) {
+        print("save started", annotatedImages)
+        var data = Data()
+        do {
+            data = try NSKeyedArchiver.archivedData(withRootObject: annotatedImages, requiringSecureCoding: false)
+        } catch {
+            print("error", error)
+        }
+        print("archive data to save", String(data: data, encoding: .utf8))
+        let name = key
+        UserDefaults.standard.set(data, forKey: key)
+        print("saved archive data")
+    }
+    
+    static func pullArchive(trainingSet: TrainingSet) {
+        guard let name = trainingSet.name else {
+            return
+        }
+        if let data = UserDefaults.standard.object(forKey: name) as? Data {
+            print("pull archive data", String(data: data, encoding: .utf8))
+            let setInfo = NSKeyedUnarchiver.unarchiveObject(with: data)
+            print("setData", setInfo)
+        }
+        print("pull archive")
+    }
+    
+    static func saveModel(trainingSet: TrainingSet, photo: Photo) {
+        trainingSet.addToPhoto(photo)
+        try? DataController.shared.mainContext.save()
+    }
+}
+
 
 class EditorVC: UIViewController {
     
     var trainingSet:TrainingSet!
+    var photo:Photo!
     var imageView: UIImageView!
     var objectSelectionTap = UILongPressGestureRecognizer()
     var imageName = ""
@@ -57,7 +139,6 @@ class EditorVC: UIViewController {
         print("added gesture recognizer")
         
         configureContraints()
-
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -72,8 +153,7 @@ class EditorVC: UIViewController {
         imageView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
     }
-    
-    
+
     fileprivate func showGestures(_ location: CGPoint, radius: CGFloat, subLayer: CAShapeLayer) {
         subLayer.path = UIBezierPath(ovalIn: CGRect(x: -0.5 * radius, y: -0.5 * radius, width: radius, height: radius)).cgPath
         subLayer.position = location
@@ -97,7 +177,6 @@ class EditorVC: UIViewController {
         //convert to pixel location
         
         let coordinates = Coordinates(x: Int(centerX), y: Int(centerY), width: Int(xDiff), height: Int(yDiff))
-        
         rect.path = UIBezierPath(rect: CGRect(x: -(xDiff / 2), y: -(yDiff / 2), width: xDiff, height: yDiff)).cgPath
         rect.position = CGPoint(x: centerX, y: centerY)
         rect.fillColor = UIColor.clear.cgColor
@@ -109,14 +188,11 @@ class EditorVC: UIViewController {
     
     @objc func tap(sender: UILongPressGestureRecognizer) {
         
-        
         let location = sender.location(in: view)
         
         switch sender.state {
         case .began:
-            print("began gesture")
-            print(location)
-            
+        
             showGestures(location, radius: 75, subLayer: reticleOuter)
             showGestures(location, radius: 3, subLayer: reticleInner)
             
@@ -128,16 +204,9 @@ class EditorVC: UIViewController {
                 reticleOuter = CAShapeLayer()
                 rectTheObject(opposingPoints)
                 //name and save annotation or discard
-                
             } else {
                 opposingPoints.removeAll()
             }
-            
-            
-            //        case .ended:
-            //            print("ended gesture")
-            //            print(location)
-            
         default:
             break
         }
@@ -155,7 +224,6 @@ class EditorVC: UIViewController {
         } catch {
             print("error encoding ")
         }
-        
     }
     
     func alertWithTF(coordinates: Coordinates) {
@@ -167,6 +235,23 @@ class EditorVC: UIViewController {
             let textField = alert.textFields![0]
             self.objectName = textField.text ?? ""
             self.encodeAnnotation(coordinates: coordinates)
+            let setName =  self.trainingSet.name ?? "default"
+            
+            var annotatedImages = [AnnotatedImage]()
+            let photoSet = self.trainingSet.photo
+            var imageArray = Array(photoSet!) as! [Photo]
+            imageArray.forEach({ (photo) in
+                let annotatedImage = AnnotatedImage(name: setName,
+                                                    label: photo.label ?? "-",
+                                                    x: Int(photo.x),
+                                                    y: Int(photo.y),
+                                                    width: Int(photo.width),
+                                                    height: Int(photo.height))
+                annotatedImages.append(annotatedImage)
+            })
+            
+            var annotationSet = AnnotationSet(fileName: setName, annotatedImages: annotatedImages)
+            AnnotationStore.encodeAnnotation(annotationImageSet: annotationSet)
         })
         let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil)
         alert.addAction(cancelAction)

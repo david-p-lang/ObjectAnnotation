@@ -12,7 +12,7 @@ struct Constants {
 
     static let Cell = "Cell"
     static let placeholderKey = "placeholder"
-    static let perPage = "12"
+    static let perPage = "15"
     static let responseFormat = "json"
     static let apiKey = "e79e37db8c17fb8f7b009ea28a20cb4c"
     

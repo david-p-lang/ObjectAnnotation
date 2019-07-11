@@ -18,7 +18,7 @@ struct FlickrPagesResult: Codable {
     let page: Int
     let pages: Int
     let perpage: Int
-    let total: Int
+    let total: String
 }
 
 struct FlickrUrl: Codable {
