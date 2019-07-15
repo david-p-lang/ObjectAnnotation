@@ -13,6 +13,7 @@ class TrainingSetVC: UICollectionViewController {
     
     var trainingSet: TrainingSet!
     var photoArray = [Photo]()
+    var setResultsController:NSFetchedResultsController<TrainingSet>!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,6 +26,19 @@ class TrainingSetVC: UICollectionViewController {
         let mediaButton = UIBarButtonItem(barButtonSystemItem: .camera, target: self, action: #selector(TrainingSetVC.addPhoto))
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(TrainingSetVC.addPhoto))
 
+    }
+    
+    func fetchSet() {
+        let request:NSFetchRequest<TrainingSet> = NSFetchRequest(entityName: "TrainingSet")
+        let predicate = NSPredicate(format: "name == %@", trainingSet.name!)
+        request.sortDescriptors = []
+        request.predicate = predicate
+        setResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: DataController.shared.mainContext, sectionNameKeyPath: nil, cacheName: nil)
+        do {
+            try setResultsController.performFetch()
+        } catch {
+            print(error)
+        }
     }
     
     @objc func addPhoto() {
@@ -57,14 +71,18 @@ class TrainingSetVC: UICollectionViewController {
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return trainingSet.photo?.count ?? 0
+        let number = setResultsController?.sections?[section].numberOfObjects ?? 0
+        return number
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! TrainingSetCell
         //cell..image = UIImage(named: "placeholder")
         //cell.backgroundColor = UIColor.red
+        let record = setResultsController.object(at: indexPath)
+        record.photo?.allObjects[indexPath]
         cell.nameLabel.text = "hi"
-        cell.imageView.image = UIImage(data: photoArray[indexPath.row].data!)
+        cell.imageView.image = currentSetArray[indexPath.row].photo.
         return cell
     }
 
