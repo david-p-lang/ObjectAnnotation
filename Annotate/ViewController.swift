@@ -28,6 +28,7 @@ class ViewController: UITableViewController {
     func fetchObjectDetectionSets(_ predicate: NSPredicate?) {
         let request:NSFetchRequest<TrainingSet> = TrainingSet.fetchRequest()
         request.sortDescriptors = []
+        request.predicate = predicate
         trainingSetResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: DataController.shared.mainContext, sectionNameKeyPath: nil, cacheName: nil)
         do {
             try trainingSetResultsController.performFetch()
@@ -61,6 +62,7 @@ class ViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath)
+        print("0-0-", cell?.textLabel?.text)
         guard let name = cell?.textLabel?.text else {return}
         fetchObjectDetectionSets(NSPredicate(format: "name == %@", name))
         pushController()

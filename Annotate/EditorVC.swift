@@ -54,29 +54,6 @@ extension AnnotatedImage {
 
 struct AnnotationStore {
     
-    static func encodeAnnotation(annotationImageSet: AnnotationSet) {
-        
-        let setAnnotationEncoder = JSONEncoder()
-        do {
-            let imageData = try setAnnotationEncoder.encode(annotationImageSet)
-            print(String(data: imageData, encoding: .utf8))
-            writeFile(data: imageData, fileName: annotationImageSet.fileName)
-        } catch {
-            print("error encoding ")
-        }
-    }
-    
-    static func writeFile(data: Data, fileName: String) {
-        let path = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        print(path)
-        let url = path[0].appendingPathComponent(fileName + ".json")
-        do {
-            try data.write(to: url)
-        } catch {
-            print("error writing to url path")
-        }
-    }
-    
     static func saveArchive(annotatedImages: [AnnotatedImage], key: String) {
         print("save started", annotatedImages)
         var data = Data()
@@ -127,16 +104,16 @@ class EditorVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         var currentImage = imageView.image
-        print(currentImage!.size)
         currentImage = currentImage!.resized(toWidth: self.view.frame.maxX)
-        print(currentImage!.size)
         imageView.image = currentImage
         view.addSubview(imageView)
+        let entity = NSEntityDescription.entity(forEntityName: "Photo", in: DataController.shared.mainContext)
+        photo = Photo(entity: entity!, insertInto: DataController.shared.mainContext)
+        photo.data = currentImage?.jpegData(compressionQuality: 1.0)
         
         objectSelectionTap = UILongPressGestureRecognizer(target: self, action: #selector(EditorVC.tap(sender:)))
         
         self.view.addGestureRecognizer(objectSelectionTap)
-        print("added gesture recognizer")
         
         configureContraints()
     }
@@ -212,15 +189,13 @@ class EditorVC: UIViewController {
         }
     }
     
-    
     func encodeAnnotation(coordinates: Coordinates) {
         let annotation = Annotation(label: objectName, coordinates: coordinates)
         let imageInfo = ImageInfo(image: imageName, annotations: [annotation])
         let objectAnnotationEncoder = JSONEncoder()
         do {
             let imageData = try objectAnnotationEncoder.encode(imageInfo)
-            print(String(data: imageData, encoding: .utf8))
-            
+            print("---", String(data: imageData, encoding: .utf8))
         } catch {
             print("error encoding ")
         }
@@ -235,23 +210,13 @@ class EditorVC: UIViewController {
             let textField = alert.textFields![0]
             self.objectName = textField.text ?? ""
             self.encodeAnnotation(coordinates: coordinates)
-            let setName =  self.trainingSet.name ?? "default"
-            
-            var annotatedImages = [AnnotatedImage]()
-            let photoSet = self.trainingSet.photo
-            var imageArray = Array(photoSet!) as! [Photo]
-            imageArray.forEach({ (photo) in
-                let annotatedImage = AnnotatedImage(name: setName,
-                                                    label: photo.label ?? "-",
-                                                    x: Int(photo.x),
-                                                    y: Int(photo.y),
-                                                    width: Int(photo.width),
-                                                    height: Int(photo.height))
-                annotatedImages.append(annotatedImage)
-            })
-            
-            var annotationSet = AnnotationSet(fileName: setName, annotatedImages: annotatedImages)
-            AnnotationStore.encodeAnnotation(annotationImageSet: annotationSet)
+            self.photo.label = self.objectName
+            self.photo.x = Int16(coordinates.x)
+            self.photo.y = Int16(coordinates.y)
+            self.photo.width = Int16(coordinates.width)
+            self.photo.height = Int16(coordinates.height)
+            AnnotationStore.saveModel(trainingSet: self.trainingSet, photo: self.photo)
+            try? DataController.shared.mainContext.save()
         })
         let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil)
         alert.addAction(cancelAction)
