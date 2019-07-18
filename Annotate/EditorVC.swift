@@ -10,8 +10,6 @@ import UIKit
 import CoreData
 import MessageUI
 
-
-
 class AnnotationStore: NSObject {
 
     static func pullArchive(trainingSet: TrainingSet) {

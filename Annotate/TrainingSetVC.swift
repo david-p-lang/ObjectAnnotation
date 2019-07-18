@@ -71,6 +71,16 @@ class TrainingSetVC: UICollectionViewController, NSFetchedResultsControllerDeleg
         }
     }
     
+    func saveAnnotationFile(data: Data, destination: URL) -> Bool {
+        do {
+            try data.write(to: destination.appendingPathComponent("annotations.json"))
+            return true
+        } catch {
+            print(error.localizedDescription)
+            return false
+        }
+    }
+    
     func checkDirectory() -> URL? {
         let setFolderName = trainingSet.name!
         guard let documentDirectory = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true) as URL else {
@@ -89,6 +99,24 @@ class TrainingSetVC: UICollectionViewController, NSFetchedResultsControllerDeleg
         return setDirectory
         
     }
+    
+    func encodeAnnotationSet(annotationSet: [ImageInfo]) -> Data {
+        var allAnnotations = Data()
+        let objectAnnotationEncoder = JSONEncoder()
+        do {
+            allAnnotations = try objectAnnotationEncoder.encode(annotationSet)
+            print("---", String(data: allAnnotations, encoding: .utf8))
+        } catch {
+            print("error encoding ")
+        }
+        return allAnnotations
+    }
+    
+    func encodeAnnotation(photo: Photo) -> ImageInfo {
+        let annotation = Annotation(label: photo.label!, coordinates: Coordinates(x: Int(photo.x), y: Int(photo.y), width: Int(photo.width), height: Int(photo.height)))
+        let imageInfo = ImageInfo(image: photo.name!, annotations: [annotation])
+        return imageInfo
+    }
         
 
     @objc func shareSet() {
@@ -100,10 +128,17 @@ class TrainingSetVC: UICollectionViewController, NSFetchedResultsControllerDeleg
             
             guard let destinationFolder = self.checkDirectory() else {return}
             
+            var jsonAnnotation = Data()
+            var annotationSet = [ImageInfo]()
+            
             photos.forEach { (photo) in
                 let test = self.saveImage(photo: photo, destination: destinationFolder)
                 print("test", test)
+                annotationSet.append(self.encodeAnnotation(photo: photo))
             }
+            jsonAnnotation = self.encodeAnnotationSet(annotationSet: annotationSet)
+            self.saveAnnotationFile(data: jsonAnnotation, destination: destinationFolder)
+            print("json data", String(data: jsonAnnotation, encoding: .utf8))
         })
         alert.addAction(save)
         let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
