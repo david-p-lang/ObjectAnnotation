@@ -21,20 +21,39 @@ class TrainingSetCell: UICollectionViewCell {
     var nameLabel:UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "-"
+        label.text = "-453453"
         return label
     }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = UIColor.gray
-        addSubview(imageView)
-        addSubview(nameLabel)
+        backgroundColor = UIColor.clear
+        let bounds = self.contentView.bounds
+        let stack = UIStackView(frame: bounds)
+        stack.axis = .vertical
         
-        imageView.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        imageView.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
-        imageView.heightAnchor.constraint(equalToConstant: 200).isActive = true
-        imageView.widthAnchor.constraint(equalToConstant: 200).isActive = true
+        imageView.backgroundColor = .clear
+        nameLabel.backgroundColor = .yellow
+        stack.backgroundColor = .orange
+        
+        stack.distribution = .fill
+        stack.spacing = 8
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        
+        stack.addArrangedSubview(nameLabel)
+        stack.addArrangedSubview(imageView)
+        addSubview(stack)
+
+        
+        stack.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        stack.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
+        stack.heightAnchor.constraint(equalToConstant: bounds.height).isActive = true
+        stack.widthAnchor.constraint(equalToConstant: bounds.width).isActive = true
+        
+//        imageView.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+//        imageView.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
+        imageView.heightAnchor.constraint(equalToConstant: bounds.height - 30).isActive = true
+        imageView.widthAnchor.constraint(equalToConstant: bounds.width).isActive = true
         
     }
     

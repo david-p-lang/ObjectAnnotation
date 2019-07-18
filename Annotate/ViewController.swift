@@ -14,15 +14,28 @@ class ViewController: UITableViewController {
     var setName = ""
     var trainingSetResultsController:NSFetchedResultsController<TrainingSet>!
     
+
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
+        configureNavigation()
+    }
+    
+    fileprivate func configureNavigation() {
         self.navigationItem.title = "Object Sets"
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(ViewController.addSetAlert))
+        let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(ViewController.addSetAlert))
+        let settingsTitle = "\u{2699}"
+        let settingsButton = UIBarButtonItem(title: settingsTitle, style: .plain, target: self, action: #selector(ViewController.settings))
+        self.navigationItem.rightBarButtonItems = [addButton, settingsButton]
     }
     
     override func viewWillAppear(_ animated: Bool) {
         fetchObjectDetectionSets(nil)
+    }
+    
+    @objc func settings() {
+        // add default email address
     }
     
     func fetchObjectDetectionSets(_ predicate: NSPredicate?) {

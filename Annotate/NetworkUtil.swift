@@ -44,7 +44,6 @@ class NetworkUtil {
         components.host = "api.flickr.com"
         components.path = "/services/rest"
         components.queryItems = [queryItemMethod, queryItemAPIKey, queryItemTag, queryItemText, queryItemFormat, queryItemPerPage, queryItemPage, queryItemCallback]
-        print("compon", components.string)
         return components.url
     }
     

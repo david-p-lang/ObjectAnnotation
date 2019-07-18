@@ -8,83 +8,47 @@
 
 import UIKit
 import CoreData
+import MessageUI
 
 
-struct ImageInfo : Codable {
-    let image: String
-    let annotations : [Annotation]
-}
 
-struct Annotation : Codable {
-    let label: String
-    let coordinates: Coordinates
-}
+class AnnotationStore: NSObject {
 
-struct Coordinates: Codable {
-    let x: Int
-    let y: Int
-    let width: Int
-    let height: Int
-}
-
-struct AnnotationSet: Codable {
-    let fileName: String
-    let annotatedImages: [AnnotatedImage]
-}
-
-struct AnnotatedImage : Codable {
-    let name: String
-    let label: String
-    let x: Int
-    let y: Int
-    let width: Int
-    let height: Int
-}
-
-extension AnnotatedImage {
-    enum CodingKeys: String, CodingKey {
-        case name
-        case label
-        case x
-        case y
-        case width
-        case height
-    }
-}
-
-struct AnnotationStore {
-    
-    static func saveArchive(annotatedImages: [AnnotatedImage], key: String) {
-        print("save started", annotatedImages)
-        var data = Data()
-        do {
-            data = try NSKeyedArchiver.archivedData(withRootObject: annotatedImages, requiringSecureCoding: false)
-        } catch {
-            print("error", error)
-        }
-        print("archive data to save", String(data: data, encoding: .utf8))
-        let name = key
-        UserDefaults.standard.set(data, forKey: key)
-        print("saved archive data")
-    }
-    
     static func pullArchive(trainingSet: TrainingSet) {
         guard let name = trainingSet.name else {
             return
         }
         if let data = UserDefaults.standard.object(forKey: name) as? Data {
-            print("pull archive data", String(data: data, encoding: .utf8))
             let setInfo = NSKeyedUnarchiver.unarchiveObject(with: data)
-            print("setData", setInfo)
         }
-        print("pull archive")
     }
+    
     
     static func saveModel(trainingSet: TrainingSet, photo: Photo) {
         trainingSet.addToPhoto(photo)
         try? DataController.shared.mainContext.save()
     }
 }
+
+//extension AnnotationStore : MFMailComposeViewControllerDelegate {
+//    
+//    func email(photos: [Photo]?) {
+//        guard let photos = photos else {return}
+//        if MFMailComposeViewController.canSendMail() {
+//            let mail = MFMailComposeViewController()
+//            mail.mailComposeDelegate = self
+//            mail.setToRecipients(["davidlang@gmx.com"])
+//            mail.setSubject("JSON Data")
+//
+//            //mail.addAttachmentData(<#T##attachment: Data##Data#>, mimeType: <#T##String#>, fileName: <#T##String#>)
+//        }
+//    }
+//    
+//    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+//        controller.dismiss(animated: true)
+//    }
+//    
+//}
 
 
 class EditorVC: UIViewController {
@@ -211,6 +175,7 @@ class EditorVC: UIViewController {
             self.objectName = textField.text ?? ""
             self.encodeAnnotation(coordinates: coordinates)
             self.photo.label = self.objectName
+            self.photo.name = String(self.photo.hash) + ".jpg"
             self.photo.x = Int16(coordinates.x)
             self.photo.y = Int16(coordinates.y)
             self.photo.width = Int16(coordinates.width)

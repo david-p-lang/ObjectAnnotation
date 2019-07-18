@@ -14,7 +14,7 @@ class TrainingSetVC: UICollectionViewController, NSFetchedResultsControllerDeleg
     var trainingSet: TrainingSet!
     var photoArray = [Photo]()
     var setResultsController:NSFetchedResultsController<TrainingSet>!
-    
+
 
     
     override func viewDidLoad() {
@@ -53,9 +53,64 @@ class TrainingSetVC: UICollectionViewController, NSFetchedResultsControllerDeleg
         collectionView.reloadData()
     }
     
-    @objc func shareSet() {
+    // Based on reply:answered Jun 4 '17 at 13:50 Bobby
+    //https://stackoverflow.com/questions/37344822/saving-image-and-then-loading-it-in-swift-ios
+    func saveImage(photo: Photo, destination: URL) -> Bool {
+        
+        guard let data = photo.data, let name = photo.name else {
+            print("data  problem")
+            return false
+        }
+
+        do {
+            try data.write(to: destination.appendingPathComponent(name))
+            return true
+        } catch {
+            print(error.localizedDescription)
+            return false
+        }
+    }
+    
+    func checkDirectory() -> URL? {
+        let setFolderName = trainingSet.name!
+        guard let documentDirectory = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true) as URL else {
+            print("document problem")
+            return nil            
+        }
+        
+        let setDirectory = documentDirectory.appendingPathComponent(setFolderName, isDirectory: true)
+     
+        do {
+            try FileManager.default.createDirectory(at: setDirectory, withIntermediateDirectories: false, attributes: nil)
+        } catch {
+            print("Directory Exists")
+        }
+        
+        return setDirectory
         
     }
+        
+
+    @objc func shareSet() {
+        let alert = UIAlertController(title: "Share", message: nil, preferredStyle: .alert)
+        let save = UIAlertAction(title: "Save", style: .default, handler: {(_) in
+            print("saving:")
+            guard let trainingSet = self.setResultsController.fetchedObjects?.first else {return}
+            guard let photos = trainingSet.photo?.allObjects as? [Photo] else {return}
+            
+            guard let destinationFolder = self.checkDirectory() else {return}
+            
+            photos.forEach { (photo) in
+                let test = self.saveImage(photo: photo, destination: destinationFolder)
+                print("test", test)
+            }
+        })
+        alert.addAction(save)
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alert.addAction(cancel)
+        present(alert, animated: true, completion: nil)
+    }
+    
     
     @objc func addPhoto() {
         let flowLayout = UICollectionViewFlowLayout()

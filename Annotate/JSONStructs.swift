@@ -29,3 +29,45 @@ struct FlickrUrl: Codable {
     let server: String
     let title: String
 }
+
+struct ImageInfo : Codable {
+    let image: String
+    let annotations : [Annotation]
+}
+
+struct Annotation : Codable {
+    let label: String
+    let coordinates: Coordinates
+}
+
+struct Coordinates: Codable {
+    let x: Int
+    let y: Int
+    let width: Int
+    let height: Int
+}
+
+struct AnnotationSet: Codable {
+    let fileName: String
+    let annotatedImages: [AnnotatedImage]
+}
+
+struct AnnotatedImage : Codable {
+    let name: String
+    let label: String
+    let x: Int
+    let y: Int
+    let width: Int
+    let height: Int
+}
+
+extension AnnotatedImage {
+    enum CodingKeys: String, CodingKey {
+        case name
+        case label
+        case x
+        case y
+        case width
+        case height
+    }
+}

@@ -19,9 +19,8 @@
 		57D4D93E4D66505B8ABD85C1 /* Pods_Annotate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3D1484330CD33435D62B8B7 /* Pods_Annotate.framework */; };
 		630B414222D4E0F900BF1A07 /* ImageBatchVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630B414122D4E0F900BF1A07 /* ImageBatchVC.swift */; };
 		630B414422D4E64300BF1A07 /* NetworkUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630B414322D4E64300BF1A07 /* NetworkUtil.swift */; };
-		630B414622D4E7D200BF1A07 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630B414522D4E7D200BF1A07 /* Constants.swift */; };
+		630B414622D4E7D200BF1A07 /* Constants+Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630B414522D4E7D200BF1A07 /* Constants+Errors.swift */; };
 		630B414822D4E88B00BF1A07 /* JSONStructs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630B414722D4E88B00BF1A07 /* JSONStructs.swift */; };
-		630B414A22D4E94100BF1A07 /* ErrorEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630B414922D4E94100BF1A07 /* ErrorEnum.swift */; };
 		630B414C22D4F55500BF1A07 /* EditorVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630B414B22D4F55500BF1A07 /* EditorVC.swift */; };
 		630B414E22D6545600BF1A07 /* CoreDataExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630B414D22D6545600BF1A07 /* CoreDataExtensions.swift */; };
 /* End PBXBuildFile section */
@@ -40,9 +39,8 @@
 		1BEC563822D290B7001FDD65 /* TrainingSetCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainingSetCell.swift; sourceTree = "<group>"; };
 		630B414122D4E0F900BF1A07 /* ImageBatchVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageBatchVC.swift; sourceTree = "<group>"; };
 		630B414322D4E64300BF1A07 /* NetworkUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkUtil.swift; sourceTree = "<group>"; };
-		630B414522D4E7D200BF1A07 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		630B414522D4E7D200BF1A07 /* Constants+Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Constants+Errors.swift"; sourceTree = "<group>"; };
 		630B414722D4E88B00BF1A07 /* JSONStructs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONStructs.swift; sourceTree = "<group>"; };
-		630B414922D4E94100BF1A07 /* ErrorEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorEnum.swift; sourceTree = "<group>"; };
 		630B414B22D4F55500BF1A07 /* EditorVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorVC.swift; sourceTree = "<group>"; };
 		630B414D22D6545600BF1A07 /* CoreDataExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataExtensions.swift; sourceTree = "<group>"; };
 		6EE0653FD45BA58F4D051E8C /* Pods-Annotate.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Annotate.release.xcconfig"; path = "Target Support Files/Pods-Annotate/Pods-Annotate.release.xcconfig"; sourceTree = "<group>"; };
@@ -97,8 +95,7 @@
 				1BEC563422D27FA0001FDD65 /* DetailDesc.rtf */,
 				630B414322D4E64300BF1A07 /* NetworkUtil.swift */,
 				630B414722D4E88B00BF1A07 /* JSONStructs.swift */,
-				630B414522D4E7D200BF1A07 /* Constants.swift */,
-				630B414922D4E94100BF1A07 /* ErrorEnum.swift */,
+				630B414522D4E7D200BF1A07 /* Constants+Errors.swift */,
 				630B414D22D6545600BF1A07 /* CoreDataExtensions.swift */,
 			);
 			path = Annotate;
@@ -244,11 +241,10 @@
 				630B414C22D4F55500BF1A07 /* EditorVC.swift in Sources */,
 				630B414422D4E64300BF1A07 /* NetworkUtil.swift in Sources */,
 				630B414E22D6545600BF1A07 /* CoreDataExtensions.swift in Sources */,
-				630B414A22D4E94100BF1A07 /* ErrorEnum.swift in Sources */,
 				1BEC563122D25DC1001FDD65 /* DataController.swift in Sources */,
 				1BEC562422D1902F001FDD65 /* Annotate.xcdatamodeld in Sources */,
 				1BEC561C22D1902F001FDD65 /* AppDelegate.swift in Sources */,
-				630B414622D4E7D200BF1A07 /* Constants.swift in Sources */,
+				630B414622D4E7D200BF1A07 /* Constants+Errors.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
