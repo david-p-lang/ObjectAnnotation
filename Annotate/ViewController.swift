@@ -11,33 +11,50 @@ import CoreData
 
 class ViewController: UITableViewController {
 
+    // declare / initialize properties
     var setName = ""
     var trainingSetResultsController:NSFetchedResultsController<TrainingSet>!
     
-
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
+        
+        //Register tableview cell
+        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: Constants.Cell)
+        
         configureNavigation()
-    }
-    
-    fileprivate func configureNavigation() {
-        self.navigationItem.title = "Object Sets"
-        let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(ViewController.addSetAlert))
-        let settingsTitle = "\u{2699}"
-        let settingsButton = UIBarButtonItem(title: settingsTitle, style: .plain, target: self, action: #selector(ViewController.settings))
-        self.navigationItem.rightBarButtonItems = [addButton, settingsButton]
     }
     
     override func viewWillAppear(_ animated: Bool) {
         fetchObjectDetectionSets(nil)
     }
     
+    /// setup the navigation bar
+    fileprivate func configureNavigation() {
+        
+        //set the title
+        self.navigationItem.title = "Object Sets"
+        
+        //addButton creates a new oject detection set that contains annotated images.
+        let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(ViewController.addSetAlert))
+        
+        //Unicode gear without hub
+        let settingsTitle = "\u{2699}"
+        
+        //brings up the settings screen
+        let settingsButton = UIBarButtonItem(title: settingsTitle, style: .plain, target: self, action: #selector(ViewController.settings))
+        
+        //add the buttons to the right side of the navigation
+        self.navigationItem.rightBarButtonItems = [addButton, settingsButton]
+    }
+    
+
     @objc func settings() {
         // add default email address
     }
     
+    /// Fetch Training Sets based on the predicate parameter
+    ///
+    /// - Parameter predicate: selection criteria
     func fetchObjectDetectionSets(_ predicate: NSPredicate?) {
         let request:NSFetchRequest<TrainingSet> = TrainingSet.fetchRequest()
         request.sortDescriptors = []
@@ -46,10 +63,11 @@ class ViewController: UITableViewController {
         do {
             try trainingSetResultsController.performFetch()
         } catch {
-            print("error")
+            print(error.localizedDescription)
         }
     }
     
+    ///Create a new training set, save to data model context, fetch and reload the data for the table
     @objc func addSet() {
         guard let entity = NSEntityDescription.entity(forEntityName: "TrainingSet", in: DataController.shared.mainContext) else { return }
         let newTrainingSet = TrainingSet(entity: entity, insertInto: DataController.shared.mainContext)
@@ -66,25 +84,37 @@ class ViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-        let trainingSetArray = Array(trainingSetResultsController.fetchedObjects!) as! [TrainingSet]
+        let trainingSetArray = Array(trainingSetResultsController.fetchedObjects!)
         cell.textLabel?.text = trainingSetArray[indexPath.row].name
-        print(trainingSetArray[indexPath.row].objectID)
-        cell.detailTextLabel?.text = trainingSetArray[indexPath.row].objectID as! String
         return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        //Get the selected cell
         let cell = tableView.cellForRow(at: indexPath)
-        print("0-0-", cell?.textLabel?.text)
+        
+        //obtain the name of the set for selection criteria below
         guard let name = cell?.textLabel?.text else {return}
+        
+        //select for choosen set name
         fetchObjectDetectionSets(NSPredicate(format: "name == %@", name))
+        
+        //Navigate to the TrainingSetVC
         pushController()
     }
     
     func pushController() {
+        
+        // create a flow layout for the TrainingSetVC collection view
         let flowLayout = UICollectionViewFlowLayout()
+        
+        
+        //create the cell size
         flowLayout.itemSize = CGSize(width: 200, height: 200)
         let viewController = TrainingSetVC(collectionViewLayout: flowLayout)
+        
+        //pass the training set to the 
         viewController.trainingSet = trainingSetResultsController.fetchedObjects?.first
         navigationController?.pushViewController(viewController, animated: true)
     }
