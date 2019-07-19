@@ -56,9 +56,17 @@ class ViewController: UITableViewController {
     ///
     /// - Parameter predicate: selection criteria
     func fetchObjectDetectionSets(_ predicate: NSPredicate?) {
+        
+        //declare a request of type training set
         let request:NSFetchRequest<TrainingSet> = TrainingSet.fetchRequest()
+        
+        //sort descriptors required
         request.sortDescriptors = []
+        
+        //add a predicate
         request.predicate = predicate
+        
+        //initialize the results controller 
         trainingSetResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: DataController.shared.mainContext, sectionNameKeyPath: nil, cacheName: nil)
         do {
             try trainingSetResultsController.performFetch()
@@ -83,7 +91,7 @@ class ViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: Constants.Cell, for: indexPath)
         let trainingSetArray = Array(trainingSetResultsController.fetchedObjects!)
         cell.textLabel?.text = trainingSetArray[indexPath.row].name
         return cell
@@ -109,12 +117,14 @@ class ViewController: UITableViewController {
         // create a flow layout for the TrainingSetVC collection view
         let flowLayout = UICollectionViewFlowLayout()
         
+        let width = view.bounds.width / 2.06
+        let height = view.bounds.height / 6
         
         //create the cell size
-        flowLayout.itemSize = CGSize(width: 200, height: 200)
+        flowLayout.itemSize = CGSize(width: width, height: height)
         let viewController = TrainingSetVC(collectionViewLayout: flowLayout)
         
-        //pass the training set to the 
+        //pass the training set to the
         viewController.trainingSet = trainingSetResultsController.fetchedObjects?.first
         navigationController?.pushViewController(viewController, animated: true)
     }
@@ -134,7 +144,6 @@ class ViewController: UITableViewController {
             textField.placeholder = "Set Name"
         }
         present(alert, animated: true, completion: nil)
-        print("present")
     }
 
 }

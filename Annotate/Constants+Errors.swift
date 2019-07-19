@@ -15,6 +15,7 @@ struct Constants {
     static let perPage = "15"
     static let responseFormat = "json"
     static let apiKey = "e79e37db8c17fb8f7b009ea28a20cb4c"
+    static let defaultSetName = "Default Set"
 }
 
 enum DataError: Error {

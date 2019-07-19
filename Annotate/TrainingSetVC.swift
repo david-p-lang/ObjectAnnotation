@@ -12,25 +12,31 @@ import CoreData
 class TrainingSetVC: UICollectionViewController, NSFetchedResultsControllerDelegate {
     
     var trainingSet: TrainingSet!
-    var photoArray = [Photo]()
     var setResultsController:NSFetchedResultsController<TrainingSet>!
 
-
-    
     override func viewDidLoad() {
         super.viewDidLoad()
     
+        //register the custom collection view cell
         self.collectionView.register(TrainingSetCell.self, forCellWithReuseIdentifier: Constants.Cell)
-        collectionView.backgroundColor = .white
-        navigationSetup()
 
+        navigationSetup()
     }
     
+    ///configure the navigation bar
     fileprivate func navigationSetup() {
+        
         self.navigationItem.title = trainingSet.name ?? "Set Content"
+        
+        //search flickr photos
         let searchButton = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(TrainingSetVC.addPhoto))
-        let mediaButton = UIBarButtonItem(barButtonSystemItem: .camera, target: self, action: #selector(TrainingSetVC.addPhoto))
+        
+        //TODO - add media library search
+        //let mediaButton = UIBarButtonItem(barButtonSystemItem: .camera, target: self, action: #selector(TrainingSetVC.addMedia)
+        
+        //transmit the folder with images and the annotations.json file
         let shareButton = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(TrainingSetVC.shareSet))
+        
         self.navigationItem.rightBarButtonItems = [searchButton, shareButton]
     }
     
@@ -39,16 +45,27 @@ class TrainingSetVC: UICollectionViewController, NSFetchedResultsControllerDeleg
     }
     
     func fetchSet() {
+        
+        //declare training set fetch request
         let request:NSFetchRequest<TrainingSet> = NSFetchRequest(entityName: "TrainingSet")
-        let predicate = NSPredicate(format: "name == %@", trainingSet.name!)
-        request.sortDescriptors = []
+        
+        //search model base on passed training set name
+        let predicate = NSPredicate(format: "name == %@", trainingSet.name ?? Constants.defaultSetName)
         request.predicate = predicate
+
+        //sort descriptor required
+        request.sortDescriptors = []
+        
+        //results controller initializer
         setResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: DataController.shared.mainContext, sectionNameKeyPath: nil, cacheName: nil)
+        
         do {
             try setResultsController.performFetch()
         } catch {
-            print(error)
+            print(error.localizedDescription)
         }
+        
+        //update the collection view
         collectionView.reloadData()
     }
     
@@ -56,11 +73,9 @@ class TrainingSetVC: UICollectionViewController, NSFetchedResultsControllerDeleg
     //https://stackoverflow.com/questions/37344822/saving-image-and-then-loading-it-in-swift-ios
     func saveImage(photo: Photo, destination: URL) -> Bool {
         
-        guard let data = photo.data, let name = photo.name else {
-            print("data  problem")
-            return false
-        }
-
+        guard let data = photo.data, let name = photo.name else {return false}
+        
+        //try to save the photo to the destination folder.
         do {
             try data.write(to: destination.appendingPathComponent(name))
             return true
@@ -70,6 +85,7 @@ class TrainingSetVC: UICollectionViewController, NSFetchedResultsControllerDeleg
         }
     }
     
+    //the annotations file lists the image name and the object annoatation details (x,y,width,height)
     func saveAnnotationFile(data: Data, destination: URL) -> Bool {
         do {
             try data.write(to: destination.appendingPathComponent("annotations.json"))
@@ -81,22 +97,20 @@ class TrainingSetVC: UICollectionViewController, NSFetchedResultsControllerDeleg
     }
     
     func checkDirectory() -> URL? {
-        let setFolderName = trainingSet.name!
+        let setFolderName = trainingSet.name ?? Constants.defaultSetName
         guard let documentDirectory = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true) as URL else {
-            print("document problem")
             return nil            
         }
         
+        //new folder name base on training set model name
         let setDirectory = documentDirectory.appendingPathComponent(setFolderName, isDirectory: true)
      
         do {
             try FileManager.default.createDirectory(at: setDirectory, withIntermediateDirectories: false, attributes: nil)
         } catch {
-            print("Directory Exists")
+            print("Directory error, the directory may already exist")
         }
-        
         return setDirectory
-        
     }
     
     func encodeAnnotationSet(annotationSet: [ImageInfo]) -> Data {
@@ -104,9 +118,8 @@ class TrainingSetVC: UICollectionViewController, NSFetchedResultsControllerDeleg
         let objectAnnotationEncoder = JSONEncoder()
         do {
             allAnnotations = try objectAnnotationEncoder.encode(annotationSet)
-            print("---", String(data: allAnnotations, encoding: .utf8))
         } catch {
-            print("error encoding ")
+            print(error.localizedDescription)
         }
         return allAnnotations
     }
@@ -132,12 +145,10 @@ class TrainingSetVC: UICollectionViewController, NSFetchedResultsControllerDeleg
             
             photos.forEach { (photo) in
                 let test = self.saveImage(photo: photo, destination: destinationFolder)
-                print("test", test)
                 annotationSet.append(self.encodeAnnotation(photo: photo))
             }
             jsonAnnotation = self.encodeAnnotationSet(annotationSet: annotationSet)
             self.saveAnnotationFile(data: jsonAnnotation, destination: destinationFolder)
-            print("json data", String(data: jsonAnnotation, encoding: .utf8))
         })
         alert.addAction(save)
         let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
@@ -153,12 +164,6 @@ class TrainingSetVC: UICollectionViewController, NSFetchedResultsControllerDeleg
         vC.trainingSet = self.trainingSet
         navigationController?.pushViewController(vC, animated: true)
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        let photoSet = trainingSet.photo as? Set<Photo>
-        photoArray = Array(photoSet!)
-    }
-    
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
 

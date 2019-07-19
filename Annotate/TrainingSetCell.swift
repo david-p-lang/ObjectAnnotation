@@ -27,7 +27,7 @@ class TrainingSetCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = UIColor.clear
+        backgroundColor = UIColor.cyan
         let bounds = self.contentView.bounds
         let stack = UIStackView(frame: bounds)
         stack.axis = .vertical
@@ -37,7 +37,7 @@ class TrainingSetCell: UICollectionViewCell {
         stack.backgroundColor = .orange
         
         stack.distribution = .fill
-        stack.spacing = 8
+        stack.spacing = 0
         stack.translatesAutoresizingMaskIntoConstraints = false
         
         stack.addArrangedSubview(nameLabel)
