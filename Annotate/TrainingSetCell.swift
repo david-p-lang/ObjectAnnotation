@@ -50,8 +50,6 @@ class TrainingSetCell: UICollectionViewCell {
         stack.heightAnchor.constraint(equalToConstant: bounds.height).isActive = true
         stack.widthAnchor.constraint(equalToConstant: bounds.width).isActive = true
         
-//        imageView.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-//        imageView.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
         imageView.heightAnchor.constraint(equalToConstant: bounds.height - 30).isActive = true
         imageView.widthAnchor.constraint(equalToConstant: bounds.width).isActive = true
         
