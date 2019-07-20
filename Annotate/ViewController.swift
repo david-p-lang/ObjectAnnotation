@@ -117,9 +117,8 @@ class ViewController: UITableViewController {
         // create a flow layout for the TrainingSetVC collection view
         let flowLayout = UICollectionViewFlowLayout()
         
-        let width = view.bounds.width / 2.06
-        let height = view.bounds.height / 6
-        
+        let width = view.bounds.width / 2.1
+        let height = view.bounds.height / 5
         //create the cell size
         flowLayout.itemSize = CGSize(width: width, height: height)
         let viewController = TrainingSetVC(collectionViewLayout: flowLayout)

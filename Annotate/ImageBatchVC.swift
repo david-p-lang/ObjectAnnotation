@@ -15,6 +15,8 @@ class ImageBatchVC: UICollectionViewController {
     var trainingSet:TrainingSet!
     var flickrSearchResult: FlickrSearchResult!
     var imagerUrls = [URL]()
+    var pages = 1
+    var tag = ""
 
     
     override func viewDidLoad() {
@@ -23,7 +25,27 @@ class ImageBatchVC: UICollectionViewController {
         // Register cell classes
         self.collectionView!.register(TrainingSetCell.self, forCellWithReuseIdentifier: Constants.Cell)
         self.navigationItem.title = "Select Image"
+        let refreshButton = UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(ImageBatchVC.refresh))
+        self.navigationItem.rightBarButtonItems = [refreshButton]
         searchPrompt()
+    }
+    
+    func deletePhotos() {
+        flickrSearchResult = nil
+        imagerUrls.removeAll()
+        print("clear")
+    }
+    @objc func refresh() {
+        deletePhotos()
+        search(tag, pageNumber: getRandomResultPage())
+        collectionView.reloadData()
+    }
+    
+    func getRandomResultPage() -> Int {
+        if pages > 99 {
+            pages = 99
+        }
+        return Int.random(in: 1...pages)
     }
     
     fileprivate func searchPrompt() {
@@ -33,7 +55,8 @@ class ImageBatchVC: UICollectionViewController {
         }
         let searchAction = UIAlertAction(title: "Search", style: .default, handler: {(action) in
             guard let text = alert.textFields?[0].text else {return}
-            self.search(text)
+            self.tag = text
+            self.search(text, pageNumber: 1)
         })
         let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         alert.addAction(searchAction)
@@ -41,10 +64,13 @@ class ImageBatchVC: UICollectionViewController {
         self.present(alert, animated: true, completion: nil)
     }
     
-    func search(_ term: String) {
-        NetworkUtil.requestImageResources(tag: term, pageNumber: 0) { (flickrSearchResult, error) in
+    func search(_ term: String, pageNumber: Int) {
+        NetworkUtil.requestImageResources(tag: term, pageNumber: pageNumber) { (flickrSearchResult, error) in
+            print("-",pageNumber)
             guard error == nil, let flickrSearchResult = flickrSearchResult else {return}
             self.flickrSearchResult = flickrSearchResult
+            self.pages = self.flickrSearchResult?.photos?.pages ?? 1
+            print("--", self.pages)
             self.setFlickrUrls()
         }
     }
@@ -57,6 +83,7 @@ class ImageBatchVC: UICollectionViewController {
             }
         }
          DispatchQueue.main.async {
+            print("reload")
             self.collectionView.reloadData()
         }
     }
@@ -69,7 +96,7 @@ class ImageBatchVC: UICollectionViewController {
         // Configure the cell
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.Cell, for: indexPath) as! TrainingSetCell
         let url = imagerUrls[indexPath.row]
-        cell.imageView.sd_setImage(with: url, placeholderImage: UIImage(named: Constants.placeholderKey), options: .progressiveLoad, context: nil)
+        cell.imageView.sd_setImage(with: url, placeholderImage: UIImage(named: Constants.placeholderKey), options: .refreshCached, context: nil)
         return cell
     }
     
@@ -80,22 +107,5 @@ class ImageBatchVC: UICollectionViewController {
         navigationController?.pushViewController(editorVC, animated: true)
     }
     
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize
-    {
-        let width = (UIScreen.main.bounds.width - 16)/3
-        return CGSize(width: width, height: width)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
-        return 1;
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat {
-        return 1;
-    }
-
-
-
-
 }
 

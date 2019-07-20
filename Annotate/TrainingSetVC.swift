@@ -158,8 +158,15 @@ class TrainingSetVC: UICollectionViewController, NSFetchedResultsControllerDeleg
     
     
     @objc func addPhoto() {
+        // create a flow layout for the TrainingSetVC collection view
         let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.itemSize = CGSize(width: 200, height: 200)
+        
+        let width = view.bounds.width / 2.1
+        let height = view.bounds.height / 5
+        
+        //set the cell size
+        flowLayout.itemSize = CGSize(width: width, height: height)
+
         let vC = ImageBatchVC(collectionViewLayout: flowLayout)
         vC.trainingSet = self.trainingSet
         navigationController?.pushViewController(vC, animated: true)
@@ -176,7 +183,9 @@ class TrainingSetVC: UICollectionViewController, NSFetchedResultsControllerDeleg
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! TrainingSetCell
         guard let imageSet = setResultsController.fetchedObjects?.first else {return cell}
         let image = imageSet.photo?.allObjects[indexPath.row] as? Photo
-        guard let imageData = image?.data else {return cell}
+        guard let imageData = image?.data, let label = image?.label else {return cell}
+        cell.stack.addArrangedSubview(cell.nameLabel)
+        cell.nameLabel.text = label
         cell.imageView.image = UIImage(data: imageData)
         return cell
     }

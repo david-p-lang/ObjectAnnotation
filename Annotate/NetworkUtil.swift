@@ -30,7 +30,8 @@ class NetworkUtil {
     }
     
     /// Create a URLComponent and array of query items and return URL from the component as an optional
-    class func buildTagQuery(_ tag: String, pageNumber: Int = 0) -> URL? {
+    class func buildTagQuery(_ tag: String, pageNumber: Int) -> URL? {
+        print("-->",pageNumber)
         let queryItemTag = URLQueryItem(name: "tags", value: tag)
         let queryItemText = URLQueryItem(name: "text", value: tag)
         let queryItemPerPage = URLQueryItem(name: "per_page", value: Constants.perPage)
@@ -43,7 +44,7 @@ class NetworkUtil {
         components.scheme = "https"
         components.host = "api.flickr.com"
         components.path = "/services/rest"
-        components.queryItems = [queryItemMethod, queryItemAPIKey, queryItemTag, queryItemText, queryItemFormat, queryItemPerPage, queryItemPage, queryItemCallback]
+        components.queryItems = [queryItemMethod, queryItemAPIKey, queryItemTag, queryItemText, queryItemFormat, queryItemPage, queryItemCallback]
         return components.url
     }
     
@@ -54,7 +55,10 @@ class NetworkUtil {
     ///   - coord: latitude and longitude as double
     ///   - pageNumber: for refreshing data with a randomized page number
     ///   - completion: FlickrSearchResults or error as optionals
-    class func requestImageResources(tag: String, pageNumber: Int = 0, completion: @escaping ((FlickrSearchResult?, Error?) -> Void)) {
+    class func requestImageResources(tag: String, pageNumber: Int = 0, completion: @escaping
+
+        ((FlickrSearchResult?, Error?) -> Void)) {
+        print("---",pageNumber)
         let success = 200...299
         guard let url = buildTagQuery(tag, pageNumber: pageNumber) else {return}
         let task = buildDataTask(url: url) { (data, response, error) in

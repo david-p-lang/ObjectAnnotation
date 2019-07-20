@@ -21,15 +21,20 @@ class TrainingSetCell: UICollectionViewCell {
     var nameLabel:UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "-453453"
+        label.text = ""
         return label
+    }()
+    
+    var stack:UIStackView = {
+        let stack = UIStackView()
+        return stack
     }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = UIColor.cyan
-        let bounds = self.contentView.bounds
-        let stack = UIStackView(frame: bounds)
+        let frame = self.contentView.frame
+        stack = UIStackView(frame: frame)
         stack.axis = .vertical
         
         imageView.backgroundColor = .clear
@@ -40,7 +45,7 @@ class TrainingSetCell: UICollectionViewCell {
         stack.spacing = 0
         stack.translatesAutoresizingMaskIntoConstraints = false
         
-        stack.addArrangedSubview(nameLabel)
+        //stack.addArrangedSubview(nameLabel)
         stack.addArrangedSubview(imageView)
         addSubview(stack)
 
