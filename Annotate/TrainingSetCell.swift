@@ -32,7 +32,7 @@ class TrainingSetCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = UIColor.cyan
+        backgroundColor = UIColor.clear
         let frame = self.contentView.frame
         stack = UIStackView(frame: frame)
         stack.axis = .vertical
@@ -52,11 +52,11 @@ class TrainingSetCell: UICollectionViewCell {
         
         stack.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
         stack.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
-        stack.heightAnchor.constraint(equalToConstant: bounds.height).isActive = true
-        stack.widthAnchor.constraint(equalToConstant: bounds.width).isActive = true
+        stack.heightAnchor.constraint(equalToConstant: self.bounds.height).isActive = true
+        stack.widthAnchor.constraint(equalToConstant: self.bounds.width).isActive = true
         
-        imageView.heightAnchor.constraint(equalToConstant: bounds.height - 30).isActive = true
-        imageView.widthAnchor.constraint(equalToConstant: bounds.width).isActive = true
+        imageView.heightAnchor.constraint(equalToConstant: self.bounds.height - 30).isActive = true
+        imageView.widthAnchor.constraint(equalToConstant: self.bounds.width).isActive = true
         
     }
     

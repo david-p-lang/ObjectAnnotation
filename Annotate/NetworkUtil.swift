@@ -44,7 +44,7 @@ class NetworkUtil {
         components.scheme = "https"
         components.host = "api.flickr.com"
         components.path = "/services/rest"
-        components.queryItems = [queryItemMethod, queryItemAPIKey, queryItemTag, queryItemText, queryItemFormat, queryItemPage, queryItemCallback]
+        components.queryItems = [queryItemMethod, queryItemAPIKey, queryItemTag, queryItemText, queryItemFormat, queryItemPage, queryItemPerPage, queryItemCallback]
         return components.url
     }
     
@@ -55,7 +55,7 @@ class NetworkUtil {
     ///   - coord: latitude and longitude as double
     ///   - pageNumber: for refreshing data with a randomized page number
     ///   - completion: FlickrSearchResults or error as optionals
-    class func requestImageResources(tag: String, pageNumber: Int = 0, completion: @escaping
+    class func requestImageResources(tag: String, pageNumber: Int, completion: @escaping
 
         ((FlickrSearchResult?, Error?) -> Void)) {
         print("---",pageNumber)

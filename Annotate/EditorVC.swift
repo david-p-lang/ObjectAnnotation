@@ -28,27 +28,6 @@ class AnnotationStore: NSObject {
     }
 }
 
-//extension AnnotationStore : MFMailComposeViewControllerDelegate {
-//    
-//    func email(photos: [Photo]?) {
-//        guard let photos = photos else {return}
-//        if MFMailComposeViewController.canSendMail() {
-//            let mail = MFMailComposeViewController()
-//            mail.mailComposeDelegate = self
-//            mail.setToRecipients(["davidlang@gmx.com"])
-//            mail.setSubject("JSON Data")
-//
-//            //mail.addAttachmentData(<#T##attachment: Data##Data#>, mimeType: <#T##String#>, fileName: <#T##String#>)
-//        }
-//    }
-//    
-//    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
-//        controller.dismiss(animated: true)
-//    }
-//    
-//}
-
-
 class EditorVC: UIViewController {
     
     var trainingSet:TrainingSet!
@@ -66,7 +45,7 @@ class EditorVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         var currentImage = imageView.image
-        currentImage = currentImage!.resized(toWidth: self.view.frame.maxX)
+        currentImage = currentImage!.resized(toWidth: self.view.frame.width)
         imageView.image = currentImage
         view.addSubview(imageView)
         let entity = NSEntityDescription.entity(forEntityName: "Photo", in: DataController.shared.mainContext)
@@ -78,10 +57,6 @@ class EditorVC: UIViewController {
         self.view.addGestureRecognizer(objectSelectionTap)
         
         configureContraints()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        
     }
     
     /// setup contraints
@@ -142,7 +117,8 @@ class EditorVC: UIViewController {
                 reticleInner = CAShapeLayer()
                 reticleOuter = CAShapeLayer()
                 rectTheObject(opposingPoints)
-                //name and save annotation or discard
+                opposingPoints.removeAll()
+
             } else {
                 opposingPoints.removeAll()
             }
@@ -156,8 +132,7 @@ class EditorVC: UIViewController {
         let imageInfo = ImageInfo(image: imageName, annotations: [annotation])
         let objectAnnotationEncoder = JSONEncoder()
         do {
-            let imageData = try objectAnnotationEncoder.encode(imageInfo)
-            print("---", String(data: imageData, encoding: .utf8))
+            _ = try objectAnnotationEncoder.encode(imageInfo)
         } catch {
             print("error encoding ")
         }
@@ -180,6 +155,7 @@ class EditorVC: UIViewController {
             self.photo.height = Int16(coordinates.height)
             AnnotationStore.saveModel(trainingSet: self.trainingSet, photo: self.photo)
             try? DataController.shared.mainContext.save()
+            self.navigationController?.popViewController(animated: true)
         })
         let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil)
         alert.addAction(cancelAction)

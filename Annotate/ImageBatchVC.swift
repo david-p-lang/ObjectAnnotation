@@ -8,6 +8,7 @@
 
 import UIKit
 import SDWebImage
+import Kingfisher
 
 
 class ImageBatchVC: UICollectionViewController {
@@ -23,11 +24,16 @@ class ImageBatchVC: UICollectionViewController {
         super.viewDidLoad()
 
         // Register cell classes
+        collectionView.backgroundColor = .white
         self.collectionView!.register(TrainingSetCell.self, forCellWithReuseIdentifier: Constants.Cell)
         self.navigationItem.title = "Select Image"
         let refreshButton = UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(ImageBatchVC.refresh))
         self.navigationItem.rightBarButtonItems = [refreshButton]
         searchPrompt()
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        //self.collectionView!.register(TrainingSetCell.self, forCellWithReuseIdentifier: Constants.Cell)
+        collectionView.reloadData()
     }
     
     func deletePhotos() {
@@ -37,16 +43,18 @@ class ImageBatchVC: UICollectionViewController {
     }
     @objc func refresh() {
         deletePhotos()
-        search(tag, pageNumber: getRandomResultPage())
-        collectionView.reloadData()
+        pages += 1
+        print("update pages", pages)
+        search(tag, pageNumber: pages)
+            NetworkUtil.requestImageResources(
+                tag: self.tag,
+                pageNumber: pages
+            ) { (flickrSearchResult, error) in
+                guard let flickrSearchResult = flickrSearchResult, error == nil else {return}
+                self.flickrSearchResult = flickrSearchResult
+            }
     }
-    
-    func getRandomResultPage() -> Int {
-        if pages > 99 {
-            pages = 99
-        }
-        return Int.random(in: 1...pages)
-    }
+
     
     fileprivate func searchPrompt() {
         let alert = UIAlertController(title: "Search Flickr", message: nil, preferredStyle: .alert)
@@ -56,7 +64,7 @@ class ImageBatchVC: UICollectionViewController {
         let searchAction = UIAlertAction(title: "Search", style: .default, handler: {(action) in
             guard let text = alert.textFields?[0].text else {return}
             self.tag = text
-            self.search(text, pageNumber: 1)
+            self.search(text, pageNumber: self.pages)
         })
         let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         alert.addAction(searchAction)
@@ -69,7 +77,11 @@ class ImageBatchVC: UICollectionViewController {
             print("-",pageNumber)
             guard error == nil, let flickrSearchResult = flickrSearchResult else {return}
             self.flickrSearchResult = flickrSearchResult
-            self.pages = self.flickrSearchResult?.photos?.pages ?? 1
+            var photoPages = self.flickrSearchResult?.photos?.pages ?? 0
+//            if photoPages > 99 {
+//                photoPages = 99
+//            }
+//            self.pages = photoPages
             print("--", self.pages)
             self.setFlickrUrls()
         }
@@ -96,7 +108,25 @@ class ImageBatchVC: UICollectionViewController {
         // Configure the cell
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.Cell, for: indexPath) as! TrainingSetCell
         let url = imagerUrls[indexPath.row]
-        cell.imageView.sd_setImage(with: url, placeholderImage: UIImage(named: Constants.placeholderKey), options: .refreshCached, context: nil)
+        cell.imageView.kf.indicatorType = .activity
+        cell.imageView.kf.setImage(
+            with: url,
+            placeholder: .none,
+            options: [
+                .scaleFactor(UIScreen.main.scale),
+                .transition(.fade(1)),
+                .fromMemoryCacheOrRefresh
+            ])
+//        {
+//            result in
+//            switch result {
+//            case .success(let value):
+//                print("Task done for: \(value.source.url?.absoluteString ?? "")")
+//            case .failure(let error):
+//                print("Job failed: \(error.localizedDescription)")
+//            }
+//        }
+        
         return cell
     }
     
@@ -105,6 +135,12 @@ class ImageBatchVC: UICollectionViewController {
         editorVC.imageView = (collectionView.cellForItem(at: indexPath) as! TrainingSetCell).imageView
         editorVC.trainingSet = self.trainingSet
         navigationController?.pushViewController(editorVC, animated: true)
+//        //defer {
+//            imagerUrls.remove(at: indexPath.row)
+//            collectionView.deleteItems(at: [indexPath])
+//        //}
+//
+//        //collectionView.reloadData()
     }
     
 }

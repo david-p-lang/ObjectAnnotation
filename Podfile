@@ -7,4 +7,5 @@ target 'Annotate' do
 
   # Pods for Annotate
     pod 'SDWebImage', '~> 5.0'
+    pod 'Kingfisher', '~> 5.0'
 end

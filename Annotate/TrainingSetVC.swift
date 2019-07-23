@@ -8,11 +8,15 @@
 
 import UIKit
 import CoreData
+import Kingfisher
+import MessageUI
 
-class TrainingSetVC: UICollectionViewController, NSFetchedResultsControllerDelegate {
+class TrainingSetVC: UICollectionViewController, NSFetchedResultsControllerDelegate, MFMailComposeViewControllerDelegate {
     
     var trainingSet: TrainingSet!
     var setResultsController:NSFetchedResultsController<TrainingSet>!
+    var setDataArray = [Data]()
+    var dirURL:URL!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -71,28 +75,30 @@ class TrainingSetVC: UICollectionViewController, NSFetchedResultsControllerDeleg
     
     // Based on reply:answered Jun 4 '17 at 13:50 Bobby
     //https://stackoverflow.com/questions/37344822/saving-image-and-then-loading-it-in-swift-ios
-    func saveImage(photo: Photo, destination: URL) -> Bool {
+    func saveImage(photo: Photo, destination: URL) -> URL? {
         
-        guard let data = photo.data, let name = photo.name else {return false}
+        guard let data = photo.data, let name = photo.name else {return nil}
         
         //try to save the photo to the destination folder.
         do {
+            let url = destination.appendingPathComponent(name)
             try data.write(to: destination.appendingPathComponent(name))
-            return true
+            return url
         } catch {
             print(error.localizedDescription)
-            return false
+            return nil
         }
     }
     
     //the annotations file lists the image name and the object annoatation details (x,y,width,height)
-    func saveAnnotationFile(data: Data, destination: URL) -> Bool {
+    func saveAnnotationFile(data: Data, destination: URL) -> URL? {
         do {
+            let url = destination.appendingPathComponent("annotations.json")
             try data.write(to: destination.appendingPathComponent("annotations.json"))
-            return true
+            return url
         } catch {
             print(error.localizedDescription)
-            return false
+            return nil
         }
     }
     
@@ -104,6 +110,7 @@ class TrainingSetVC: UICollectionViewController, NSFetchedResultsControllerDeleg
         
         //new folder name base on training set model name
         let setDirectory = documentDirectory.appendingPathComponent(setFolderName, isDirectory: true)
+        dirURL = setDirectory
      
         do {
             try FileManager.default.createDirectory(at: setDirectory, withIntermediateDirectories: false, attributes: nil)
@@ -129,31 +136,34 @@ class TrainingSetVC: UICollectionViewController, NSFetchedResultsControllerDeleg
         let imageInfo = ImageInfo(image: photo.name!, annotations: [annotation])
         return imageInfo
     }
-        
+    
+    
+    func airDrop() {
+        let controller = UIActivityViewController(activityItems: [dirURL!], applicationActivities: nil)
+        controller.excludedActivityTypes = [.postToTencentWeibo, .postToFacebook, .postToTwitter, .postToVimeo, .openInIBooks, .addToReadingList, .copyToPasteboard, .assignToContact, .saveToCameraRoll, .message, .print, .markupAsPDF]
+        self.present(controller, animated: true, completion: nil)
+    }
+
 
     @objc func shareSet() {
-        let alert = UIAlertController(title: "Share", message: nil, preferredStyle: .alert)
-        let save = UIAlertAction(title: "Save", style: .default, handler: {(_) in
-            print("saving:")
             guard let trainingSet = self.setResultsController.fetchedObjects?.first else {return}
             guard let photos = trainingSet.photo?.allObjects as? [Photo] else {return}
             
             guard let destinationFolder = self.checkDirectory() else {return}
-            
+            print(destinationFolder)
             var jsonAnnotation = Data()
             var annotationSet = [ImageInfo]()
             
             photos.forEach { (photo) in
-                let test = self.saveImage(photo: photo, destination: destinationFolder)
+                guard let url = self.saveImage(photo: photo, destination: destinationFolder) else {return}
                 annotationSet.append(self.encodeAnnotation(photo: photo))
+                self.setDataArray.append(photo.data!)
             }
             jsonAnnotation = self.encodeAnnotationSet(annotationSet: annotationSet)
-            self.saveAnnotationFile(data: jsonAnnotation, destination: destinationFolder)
-        })
-        alert.addAction(save)
-        let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        alert.addAction(cancel)
-        present(alert, animated: true, completion: nil)
+            guard let url = self.saveAnnotationFile(data: jsonAnnotation, destination: destinationFolder) else {return}
+            self.setDataArray.append(jsonAnnotation)
+            self.airDrop()
+    
     }
     
     
@@ -174,19 +184,22 @@ class TrainingSetVC: UICollectionViewController, NSFetchedResultsControllerDeleg
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
 
-        guard let trainingSetFromResults = setResultsController?.fetchedObjects as? [TrainingSet] else {return 0}
+        guard let trainingSetFromResults = setResultsController?.fetchedObjects else {return 0}
         let number = trainingSetFromResults[0].photo?.count ?? 0
         return number
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! TrainingSetCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.Cell, for: indexPath) as! TrainingSetCell
         guard let imageSet = setResultsController.fetchedObjects?.first else {return cell}
         let image = imageSet.photo?.allObjects[indexPath.row] as? Photo
         guard let imageData = image?.data, let label = image?.label else {return cell}
         cell.stack.addArrangedSubview(cell.nameLabel)
         cell.nameLabel.text = label
         cell.imageView.image = UIImage(data: imageData)
+        cell.imageView.layer.cornerRadius = 15
+        
+        cell.imageView.layer.masksToBounds = true
         return cell
     }
 
@@ -210,19 +223,7 @@ class TrainingSetVC: UICollectionViewController, NSFetchedResultsControllerDeleg
             break
         }
     }
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize
-    {
-        let width = (UIScreen.main.bounds.width - 16)/3
-        return CGSize(width: width, height: width)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
-        return 1;
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat {
-        return 1;
-    }
+
     
 
 
