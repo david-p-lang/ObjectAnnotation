@@ -79,19 +79,33 @@ class ViewController: UITableViewController {
     
     ///Create a new training set, save to data model context, fetch and reload the data for the table
     @objc func addSet() {
+        
+        //prepare to add a training set into coredata
         guard let entity = NSEntityDescription.entity(forEntityName: "TrainingSet", in: DataController.shared.mainContext) else { return }
         let newTrainingSet = TrainingSet(entity: entity, insertInto: DataController.shared.mainContext)
+        
+        //identify the training set with a name
         newTrainingSet.name = setName
+        
+        //attempt to save the data
         try? DataController.shared.mainContext.save()
+        
+        //update the results controller
         fetchObjectDetectionSets(nil)
+        
+        //reload the information in the tableview
         tableView.reloadData()
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        //use the coredata model to determine the number of objects for display
         let number = trainingSetResultsController?.sections?[section].numberOfObjects ?? 0
         
+        //there are no training sets, provide a message to the user to create a training set
         if number == 0 {
             tableView.setEmptyMessage("Add a training set")
+        } else {
+            tableView.setEmptyMessage("")
         }
         
         return number
@@ -100,23 +114,31 @@ class ViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: Constants.Cell, for: indexPath)
         let trainingSetArray = Array(trainingSetResultsController.fetchedObjects!)
+        
+        //set the name
         cell.textLabel?.text = trainingSetArray[indexPath.row].name
-        cell.textLabel?.textColor = .black
+        
+        // center the text in the cell
         cell.textLabel?.textAlignment = .center
+        
+        //clarify the cell border
         cell.contentView.backgroundColor = UIColor.init(displayP3Red: 0.9, green: 0.9, blue: 0.9, alpha: 0.2)
-        cell.layer.shadowColor = UIColor.black.cgColor
-        cell.layer.shadowOpacity = 0.2
-        cell.layer.shadowRadius = 6
-        cell.layer.cornerRadius = 10
-        cell.layer.masksToBounds = true
+        
+        //the method requires a UITableViewCell is returned
         return cell
     }
     
+    
+    ///this method allows for deletion of cells and calls removeset to update the our model
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             let name = tableView.cellForRow(at: indexPath)?.textLabel?.text ?? ""
             removeSet(name: name)
+            
+            //update the results controller
             fetchObjectDetectionSets(nil)
+            
+            //refresh our tableview
             tableView.reloadData()
         }
     }

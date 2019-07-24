@@ -198,8 +198,11 @@ class TrainingSetVC: UICollectionViewController, NSFetchedResultsControllerDeleg
         //the total number of photos or 0 if nil
         let number = trainingSetFromResults[0].photo?.count ?? 0
         
+        //provide prompt for the user to add images if none are present
         if number == 0 {
             collectionView.setEmptyMessage("Add images for training")
+        } else {
+            collectionView.setEmptyMessage("")
         }
         
         return number
@@ -219,6 +222,8 @@ class TrainingSetVC: UICollectionViewController, NSFetchedResultsControllerDeleg
         
         // for this view controller we want to display the associated label with the image
         cell.stack.addArrangedSubview(cell.nameLabel)
+        
+        //adapt the custom cell constraints for the namelabel
         cell.trainingConstraints()
         
         cell.nameLabel.text = label
