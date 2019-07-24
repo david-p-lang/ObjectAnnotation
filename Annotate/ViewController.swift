@@ -20,7 +20,7 @@ class ViewController: UITableViewController {
         
         //Register tableview cell
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: Constants.Cell)
-        tableView.separatorStyle = .singleLine
+        tableView.separatorStyle = .none
         tableView.separatorInset.left = 0
         
         configureNavigation()
@@ -49,7 +49,6 @@ class ViewController: UITableViewController {
         self.navigationItem.rightBarButtonItems = [addButton, settingsButton]
     }
     
-
     @objc func settings() {
         let vC = SettingsVC()
         navigationController?.pushViewController(vC, animated: true)
@@ -98,13 +97,22 @@ class ViewController: UITableViewController {
         cell.textLabel?.text = trainingSetArray[indexPath.row].name
         cell.textLabel?.textColor = .black
         cell.textLabel?.textAlignment = .center
-        cell.contentView.backgroundColor = .lightGray
+        cell.contentView.backgroundColor = UIColor.init(displayP3Red: 0.9, green: 0.9, blue: 0.9, alpha: 0.2)
         cell.layer.shadowColor = UIColor.black.cgColor
         cell.layer.shadowOpacity = 0.2
         cell.layer.shadowRadius = 6
         cell.layer.cornerRadius = 10
         cell.layer.masksToBounds = true
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            let name = tableView.cellForRow(at: indexPath)?.textLabel?.text ?? ""
+            removeSet(name: name)
+            fetchObjectDetectionSets(nil)
+            tableView.reloadData()
+        }
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -154,5 +162,4 @@ class ViewController: UITableViewController {
         }
         present(alert, animated: true, completion: nil)
     }
-
 }

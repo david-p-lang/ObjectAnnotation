@@ -6,5 +6,5 @@ target 'Annotate' do
   use_frameworks!
 
   # Pods for Annotate
-    pod 'Kingfisher', '~> 5.0'
+ pod 'Kingfisher', '~> 5.0'
 end

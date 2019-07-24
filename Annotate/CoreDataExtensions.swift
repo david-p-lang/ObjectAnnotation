@@ -11,7 +11,7 @@ import CoreData
 
 extension ViewController {
     
-    func fetchSet(name: String) -> [Photo]? {
+    func removeSet(name: String) {
         var setResultsController:NSFetchedResultsController<TrainingSet>!
         let request:NSFetchRequest<TrainingSet> = NSFetchRequest(entityName: "TrainingSet")
         let predicate = NSPredicate(format: "name == %@", name)
@@ -21,11 +21,12 @@ extension ViewController {
         do {
             try setResultsController.performFetch()
         } catch {
-            print(error)
+            print(error.localizedDescription)
         }
-        guard let trainingSet = setResultsController.fetchedObjects?.first else { return nil}
-        guard let photos = trainingSet.photo?.allObjects as? [Photo] else {return nil}
-        return photos
+        guard let trainingSet = setResultsController.fetchedObjects?.first else { return }
+        DataController.shared.mainContext.delete(trainingSet)
+        try? DataController.shared.mainContext.save()
+
     }
     
     

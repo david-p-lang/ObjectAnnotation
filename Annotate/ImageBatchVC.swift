@@ -17,21 +17,24 @@ class ImageBatchVC: UICollectionViewController {
     var imagerUrls = [URL]()
     var pages = 1
     var tag = ""
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
         // Register cell classes
         collectionView.backgroundColor = .white
         self.collectionView!.register(TrainingSetCell.self, forCellWithReuseIdentifier: Constants.Cell)
-        self.navigationItem.title = "Select Image"
-        let refreshButton = UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(ImageBatchVC.refresh))
-        self.navigationItem.rightBarButtonItems = [refreshButton]
+        configureNavigation()
         searchPrompt()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         collectionView.reloadData()
+    }
+    
+    fileprivate func configureNavigation() {
+        self.navigationItem.title = "Select Image"
+        let refreshButton = UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(ImageBatchVC.refresh))
+        self.navigationItem.rightBarButtonItems = [refreshButton]
     }
     
     func deletePhotos() {
@@ -48,9 +51,12 @@ class ImageBatchVC: UICollectionViewController {
                 tag: self.tag,
                 pageNumber: pages
             ) { (flickrSearchResult, error) in
-                guard let flickrSearchResult = flickrSearchResult, error == nil else {return}
+                if let error = error {
+                    self.displayAlert(error)
+                }
+                guard let flickrSearchResult = flickrSearchResult else {return}
                 self.flickrSearchResult = flickrSearchResult
-            }
+         }
     }
 
     fileprivate func searchPrompt() {

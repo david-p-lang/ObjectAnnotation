@@ -24,6 +24,7 @@ class TrainingSetVC: UICollectionViewController, NSFetchedResultsControllerDeleg
         //register the custom collection view cell
         self.collectionView.register(TrainingSetCell.self, forCellWithReuseIdentifier: Constants.Cell)
 
+        collectionView.backgroundColor = .white
         navigationSetup()
     }
     

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1BC9021C22E89DFF00D4502C /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BC9021B22E89DFF00D4502C /* UIViewController.swift */; };
 		1BCCB18C22E777760041F2D2 /* SettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BCCB18B22E777760041F2D2 /* SettingsVC.swift */; };
 		1BEC561C22D1902F001FDD65 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BEC561B22D1902F001FDD65 /* AppDelegate.swift */; };
 		1BEC561E22D1902F001FDD65 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BEC561D22D1902F001FDD65 /* ViewController.swift */; };
@@ -27,6 +28,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1BC9021B22E89DFF00D4502C /* UIViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewController.swift; sourceTree = "<group>"; };
 		1BCCB18B22E777760041F2D2 /* SettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SettingsVC.swift; path = ../../../../../System/Volumes/Data/Users/davidlang/Documents/ObjectAnnotation/Annotate/SettingsVC.swift; sourceTree = "<group>"; };
 		1BEC561822D1902F001FDD65 /* Annotate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Annotate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1BEC561B22D1902F001FDD65 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -88,6 +90,7 @@
 				1BCCB18B22E777760041F2D2 /* SettingsVC.swift */,
 				1BEC563222D27DE3001FDD65 /* TrainingSetVC.swift */,
 				630B414122D4E0F900BF1A07 /* ImageBatchVC.swift */,
+				1BC9021B22E89DFF00D4502C /* UIViewController.swift */,
 				630B414B22D4F55500BF1A07 /* EditorVC.swift */,
 				1BEC563822D290B7001FDD65 /* TrainingSetCell.swift */,
 				1BEC562522D19032001FDD65 /* Assets.xcassets */,
@@ -132,7 +135,7 @@
 				1BEC561422D1902F001FDD65 /* Sources */,
 				1BEC561522D1902F001FDD65 /* Frameworks */,
 				1BEC561622D1902F001FDD65 /* Resources */,
-				B1AD8F1856F845C48A8F5867 /* [CP] Embed Pods Frameworks */,
+				E89B41C3E78F172BD9DC0F7F /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -159,7 +162,7 @@
 				};
 			};
 			buildConfigurationList = 1BEC561322D1902F001FDD65 /* Build configuration list for PBXProject "Annotate" */;
-			compatibilityVersion = "Xcode 9.3";
+			compatibilityVersion = "Xcode 10.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -190,23 +193,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		B1AD8F1856F845C48A8F5867 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Annotate/Pods-Annotate-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Annotate/Pods-Annotate-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Annotate/Pods-Annotate-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		C0A82E3B9F8155F68CCE10BC /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -229,6 +215,23 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		E89B41C3E78F172BD9DC0F7F /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Annotate/Pods-Annotate-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Annotate/Pods-Annotate-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Annotate/Pods-Annotate-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -236,6 +239,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1BC9021C22E89DFF00D4502C /* UIViewController.swift in Sources */,
 				1BCCB18C22E777760041F2D2 /* SettingsVC.swift in Sources */,
 				1BEC563922D290B7001FDD65 /* TrainingSetCell.swift in Sources */,
 				630B414222D4E0F900BF1A07 /* ImageBatchVC.swift in Sources */,
