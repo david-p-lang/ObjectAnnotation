@@ -16,6 +16,7 @@ struct Constants {
     static let apiKey = "e79e37db8c17fb8f7b009ea28a20cb4c"
     static let defaultSetName = "Default Set"
     static let perPageKey = "perPage"
+    static let wheelWithoutHubKey = "\u{2699}"
 }
 
 enum DataError: Error {

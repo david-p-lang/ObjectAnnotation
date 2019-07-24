@@ -20,6 +20,8 @@ class ViewController: UITableViewController {
         
         //Register tableview cell
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: Constants.Cell)
+        tableView.separatorStyle = .singleLine
+        tableView.separatorInset.left = 0
         
         configureNavigation()
     }
@@ -38,7 +40,7 @@ class ViewController: UITableViewController {
         let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(ViewController.addSetAlert))
         
         //Unicode gear without hub
-        let settingsTitle = "\u{2699}"
+        let settingsTitle = Constants.wheelWithoutHubKey
         
         //brings up the settings screen
         let settingsButton = UIBarButtonItem(title: settingsTitle, style: .plain, target: self, action: #selector(ViewController.settings))
@@ -87,14 +89,21 @@ class ViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let number = trainingSetResultsController?.sections?[section].numberOfObjects ?? 0
-        return number
+        return trainingSetResultsController?.sections?[section].numberOfObjects ?? 0
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: Constants.Cell, for: indexPath)
         let trainingSetArray = Array(trainingSetResultsController.fetchedObjects!)
         cell.textLabel?.text = trainingSetArray[indexPath.row].name
+        cell.textLabel?.textColor = .black
+        cell.textLabel?.textAlignment = .center
+        cell.contentView.backgroundColor = .lightGray
+        cell.layer.shadowColor = UIColor.black.cgColor
+        cell.layer.shadowOpacity = 0.2
+        cell.layer.shadowRadius = 6
+        cell.layer.cornerRadius = 10
+        cell.layer.masksToBounds = true
         return cell
     }
     

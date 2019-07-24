@@ -163,12 +163,12 @@ class TrainingSetVC: UICollectionViewController, NSFetchedResultsControllerDeleg
             var annotationSet = [ImageInfo]()
             
             photos.forEach { (photo) in
-                guard let url = self.saveImage(photo: photo, destination: destinationFolder) else {return}
+                guard let _ = self.saveImage(photo: photo, destination: destinationFolder) else {return}
                 annotationSet.append(self.encodeAnnotation(photo: photo))
                 self.setDataArray.append(photo.data!)
             }
             jsonAnnotation = self.encodeAnnotationSet(annotationSet: annotationSet)
-            guard let url = self.saveAnnotationFile(data: jsonAnnotation, destination: destinationFolder) else {return}
+            guard let _ = self.saveAnnotationFile(data: jsonAnnotation, destination: destinationFolder) else {return}
             self.setDataArray.append(jsonAnnotation)
             self.airDrop()
     }

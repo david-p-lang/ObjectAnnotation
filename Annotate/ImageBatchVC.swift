@@ -18,7 +18,6 @@ class ImageBatchVC: UICollectionViewController {
     var pages = 1
     var tag = ""
 
-    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -30,16 +29,16 @@ class ImageBatchVC: UICollectionViewController {
         self.navigationItem.rightBarButtonItems = [refreshButton]
         searchPrompt()
     }
+    
     override func viewWillAppear(_ animated: Bool) {
-        //self.collectionView!.register(TrainingSetCell.self, forCellWithReuseIdentifier: Constants.Cell)
         collectionView.reloadData()
     }
     
     func deletePhotos() {
         flickrSearchResult = nil
         imagerUrls.removeAll()
-        print("clear")
     }
+    
     @objc func refresh() {
         deletePhotos()
         pages += 1
@@ -54,7 +53,6 @@ class ImageBatchVC: UICollectionViewController {
             }
     }
 
-    
     fileprivate func searchPrompt() {
         let alert = UIAlertController(title: "Search Flickr", message: nil, preferredStyle: .alert)
         alert.addTextField { (textField) in
@@ -76,12 +74,6 @@ class ImageBatchVC: UICollectionViewController {
             print("-",pageNumber)
             guard error == nil, let flickrSearchResult = flickrSearchResult else {return}
             self.flickrSearchResult = flickrSearchResult
-            var photoPages = self.flickrSearchResult?.photos?.pages ?? 0
-//            if photoPages > 99 {
-//                photoPages = 99
-//            }
-//            self.pages = photoPages
-            print("--", self.pages)
             self.setFlickrUrls()
         }
     }
@@ -94,7 +86,6 @@ class ImageBatchVC: UICollectionViewController {
             }
         }
          DispatchQueue.main.async {
-            print("reload")
             self.collectionView.reloadData()
         }
     }
@@ -117,16 +108,6 @@ class ImageBatchVC: UICollectionViewController {
                 .transition(.fade(1)),
                 .fromMemoryCacheOrRefresh
             ])
-//        {
-//            result in
-//            switch result {
-//            case .success(let value):
-//                print("Task done for: \(value.source.url?.absoluteString ?? "")")
-//            case .failure(let error):
-//                print("Job failed: \(error.localizedDescription)")
-//            }
-//        }
-        
         return cell
     }
     
@@ -135,7 +116,6 @@ class ImageBatchVC: UICollectionViewController {
         editorVC.passedImage = (collectionView.cellForItem(at: indexPath) as? TrainingSetCell)?.imageView.image
         editorVC.trainingSet = self.trainingSet
         navigationController?.pushViewController(editorVC, animated: true)
-
     }
 }
 
