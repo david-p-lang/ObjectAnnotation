@@ -1,13 +1,9 @@
 # ObjectAnnotation
 Image annotation tool for a createML app object detection project
 
-![Adding Label](/images/AddLabel.png) {
-  width: 70%;
-  border: none;
-  background: none;
-}
+![Adding Label](/images/AddLabel.png) 
 
-<img src="https://github.com/favicon.ico" width="48">
+<img src="https://github.com/david-p-lang/ObjectAnnotation/blob/master/images/AddLabel.pngo" width="50">
 ![Adding Training Set](/images/AddSet.png)
 ![GitHub Logo](/images/ImageSelection.png)
 ![GitHub Logo](/images/LabeledImages.png)
