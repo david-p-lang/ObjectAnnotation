@@ -88,7 +88,13 @@ class ViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return trainingSetResultsController?.sections?[section].numberOfObjects ?? 0
+        let number = trainingSetResultsController?.sections?[section].numberOfObjects ?? 0
+        
+        if number == 0 {
+            tableView.setEmptyMessage("Add a training set")
+        }
+        
+        return number
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

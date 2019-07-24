@@ -34,7 +34,7 @@ class TrainingSetVC: UICollectionViewController, NSFetchedResultsControllerDeleg
         self.navigationItem.title = trainingSet.name ?? "Set Content"
         
         //search flickr photos
-        let searchButton = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(TrainingSetVC.addPhoto))
+        let searchButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(TrainingSetVC.addPhoto))
         
         //let mediaButton = UIBarButtonItem(barButtonSystemItem: .camera, target: self, action: #selector(TrainingSetVC.addMedia)
         
@@ -195,8 +195,14 @@ class TrainingSetVC: UICollectionViewController, NSFetchedResultsControllerDeleg
         //determine the number of training sets
         guard let trainingSetFromResults = setResultsController?.fetchedObjects else {return 0}
         
-        //return the total number of photos or 0 if nil
-        return trainingSetFromResults[0].photo?.count ?? 0
+        //the total number of photos or 0 if nil
+        let number = trainingSetFromResults[0].photo?.count ?? 0
+        
+        if number == 0 {
+            collectionView.setEmptyMessage("Add images for training")
+        }
+        
+        return number
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -241,3 +247,5 @@ class TrainingSetVC: UICollectionViewController, NSFetchedResultsControllerDeleg
         }
     }
 }
+
+

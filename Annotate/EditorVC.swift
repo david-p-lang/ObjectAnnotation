@@ -11,16 +11,6 @@ import CoreData
 import MessageUI
 
 class AnnotationStore: NSObject {
-
-//    static func pullArchive(trainingSet: TrainingSet) {
-//        guard let name = trainingSet.name else {
-//            return
-//        }
-//        if let data = UserDefaults.standard.object(forKey: name) as? Data {
-//            let setInfo = NSKeyedUnarchiver.unarchiveObject(with: data)
-//        }
-//    }
-    
     
     static func saveModel(trainingSet: TrainingSet, photo: Photo) {
         trainingSet.addToPhoto(photo)
@@ -48,6 +38,7 @@ class EditorVC: UIViewController {
     
         guard let currentImage = passedImage?.resized(toWidth: self.view.frame.width) else {return}
         imageView = UIImageView()
+        imageView.backgroundColor = .white
         imageView.contentMode = .scaleAspectFit
         imageView.image = currentImage
 
