@@ -80,21 +80,34 @@ class EditorVC: UIViewController {
         let lowerPoint = locations[0].y < locations[1].y ? locations[0] : locations[1]
         let upperPoint = locations[0].y < locations[1].y ? locations[1] : locations[0]
         
-        //define some annotation attributes for drawing boundry and 
+        //define some annotation attributes for drawing boundry and
         let centerX = (rightPoint.x + leftPoint.x) / 2
         let centerY = (upperPoint.y + lowerPoint.y) / 2
         let xDiff = rightPoint.x - leftPoint.x
         let yDiff = upperPoint.y - lowerPoint.y
         
-        //convert to pixel location
-        
+        //set the coordinates for core data
         let coordinates = Coordinates(x: Int(centerX), y: Int(centerY), width: Int(xDiff), height: Int(yDiff))
+        
+        //set the shapelayer path to draw
         rect.path = UIBezierPath(rect: CGRect(x: -(xDiff / 2), y: -(yDiff / 2), width: xDiff, height: yDiff)).cgPath
+        
+        //reference the centerx and centery from above
         rect.position = CGPoint(x: centerX, y: centerY)
+        
+        //keep the fill color clear
         rect.fillColor = UIColor.clear.cgColor
+        
+        //set the stroke color to red
         rect.strokeColor = UIColor.red.cgColor
+        
+        //add the shapelayer to the imageview
         imageView.layer.addSublayer(rect)
+        
+        //clear the longpress location reticles
         opposingPoints.removeAll()
+        
+        //prompt to get an object label
         alertWithTF(coordinates: coordinates)
     }
     

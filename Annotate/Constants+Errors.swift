@@ -13,7 +13,7 @@ struct Constants {
     static let placeholderKey = "placeholder"
     static let perPage = "15"
     static let responseFormat = "json"
-    static let apiKey = "e79e37db8c17fb8f7b009ea28a20cb4c"
+    static let apiKey = ""
     static let defaultSetName = "Default Set"
     static let perPageKey = "perPage"
     static let wheelWithoutHubKey = "\u{2699}"
