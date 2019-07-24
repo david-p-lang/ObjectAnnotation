@@ -23,6 +23,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         navController.viewControllers = [firstViewController]
         self.window?.rootViewController = navController
         self.window?.makeKeyAndVisible()
+        
+        print(UserDefaults.standard.value(forKey: "perPage"))
+        
         return true
     }
 

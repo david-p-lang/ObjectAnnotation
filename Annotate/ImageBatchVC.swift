@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SDWebImage
 import Kingfisher
 
 
@@ -108,6 +107,7 @@ class ImageBatchVC: UICollectionViewController {
         // Configure the cell
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.Cell, for: indexPath) as! TrainingSetCell
         let url = imagerUrls[indexPath.row]
+        cell.batchContraints()
         cell.imageView.kf.indicatorType = .activity
         cell.imageView.kf.setImage(
             with: url,
@@ -132,16 +132,10 @@ class ImageBatchVC: UICollectionViewController {
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let editorVC = EditorVC()
-        editorVC.imageView = (collectionView.cellForItem(at: indexPath) as! TrainingSetCell).imageView
+        editorVC.passedImage = (collectionView.cellForItem(at: indexPath) as? TrainingSetCell)?.imageView.image
         editorVC.trainingSet = self.trainingSet
         navigationController?.pushViewController(editorVC, animated: true)
-//        //defer {
-//            imagerUrls.remove(at: indexPath.row)
-//            collectionView.deleteItems(at: [indexPath])
-//        //}
-//
-//        //collectionView.reloadData()
+
     }
-    
 }
 

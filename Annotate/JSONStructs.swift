@@ -33,6 +33,7 @@ struct FlickrUrl: Codable {
 struct AllAnnotations: Codable {
     let imageInfoSet: [ImageInfo]
 }
+
 struct ImageInfo : Codable {
     let image: String
     let annotations : [Annotation]

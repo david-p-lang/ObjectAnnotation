@@ -49,7 +49,8 @@ class ViewController: UITableViewController {
     
 
     @objc func settings() {
-        // add default email address
+        let vC = SettingsVC()
+        navigationController?.pushViewController(vC, animated: true)
     }
     
     /// Fetch Training Sets based on the predicate parameter

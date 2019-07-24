@@ -35,7 +35,6 @@ class TrainingSetVC: UICollectionViewController, NSFetchedResultsControllerDeleg
         //search flickr photos
         let searchButton = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(TrainingSetVC.addPhoto))
         
-        //TODO - add media library search
         //let mediaButton = UIBarButtonItem(barButtonSystemItem: .camera, target: self, action: #selector(TrainingSetVC.addMedia)
         
         //transmit the folder with images and the annotations.json file
@@ -120,6 +119,10 @@ class TrainingSetVC: UICollectionViewController, NSFetchedResultsControllerDeleg
         return setDirectory
     }
     
+    /// Encode the annotation info asociated with the image
+    ///
+    /// - Parameter annotationSet: x,y,width, height, label, name
+    /// - Returns: the encoded json data
     func encodeAnnotationSet(annotationSet: [ImageInfo]) -> Data {
         var allAnnotations = Data()
         let objectAnnotationEncoder = JSONEncoder()
@@ -131,13 +134,17 @@ class TrainingSetVC: UICollectionViewController, NSFetchedResultsControllerDeleg
         return allAnnotations
     }
     
+    /// The coredata model photo provides the data for conversion to JSON
+    ///
+    /// - Parameter photo: Coredata photo
+    /// - Returns: the codable struct Image info defined in the JSON structs file
     func encodeAnnotation(photo: Photo) -> ImageInfo {
         let annotation = Annotation(label: photo.label!, coordinates: Coordinates(x: Int(photo.x), y: Int(photo.y), width: Int(photo.width), height: Int(photo.height)))
         let imageInfo = ImageInfo(image: photo.name!, annotations: [annotation])
         return imageInfo
     }
     
-    
+    /// Utilize the standard alert to transmit or save the training set
     func airDrop() {
         let controller = UIActivityViewController(activityItems: [dirURL!], applicationActivities: nil)
         controller.excludedActivityTypes = [.postToTencentWeibo, .postToFacebook, .postToTwitter, .postToVimeo, .openInIBooks, .addToReadingList, .copyToPasteboard, .assignToContact, .saveToCameraRoll, .message, .print, .markupAsPDF]
@@ -145,6 +152,7 @@ class TrainingSetVC: UICollectionViewController, NSFetchedResultsControllerDeleg
     }
 
 
+    /// build the folder with image data and the annotations.json file
     @objc func shareSet() {
             guard let trainingSet = self.setResultsController.fetchedObjects?.first else {return}
             guard let photos = trainingSet.photo?.allObjects as? [Photo] else {return}
@@ -163,9 +171,7 @@ class TrainingSetVC: UICollectionViewController, NSFetchedResultsControllerDeleg
             guard let url = self.saveAnnotationFile(data: jsonAnnotation, destination: destinationFolder) else {return}
             self.setDataArray.append(jsonAnnotation)
             self.airDrop()
-    
     }
-    
     
     @objc func addPhoto() {
         // create a flow layout for the TrainingSetVC collection view
@@ -178,28 +184,38 @@ class TrainingSetVC: UICollectionViewController, NSFetchedResultsControllerDeleg
         flowLayout.itemSize = CGSize(width: width, height: height)
 
         let vC = ImageBatchVC(collectionViewLayout: flowLayout)
+        
+        // designate the training set for the next view controller
         vC.trainingSet = self.trainingSet
         navigationController?.pushViewController(vC, animated: true)
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-
+        //determine the number of training sets
         guard let trainingSetFromResults = setResultsController?.fetchedObjects else {return 0}
-        let number = trainingSetFromResults[0].photo?.count ?? 0
-        return number
+        
+        //return the total number of photos or 0 if nil
+        return trainingSetFromResults[0].photo?.count ?? 0
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.Cell, for: indexPath) as! TrainingSetCell
+        
+        // obtain the correct training set
         guard let imageSet = setResultsController.fetchedObjects?.first else {return cell}
+        
+        // set the image for the given index path
         let image = imageSet.photo?.allObjects[indexPath.row] as? Photo
+        
+        // obtain the actual image data for display and the object label
         guard let imageData = image?.data, let label = image?.label else {return cell}
+        
+        // for this view controller we want to display the associated label with the image
         cell.stack.addArrangedSubview(cell.nameLabel)
+        cell.trainingConstraints()
+        
         cell.nameLabel.text = label
         cell.imageView.image = UIImage(data: imageData)
-        cell.imageView.layer.cornerRadius = 15
-        
-        cell.imageView.layer.masksToBounds = true
         return cell
     }
 
@@ -223,8 +239,4 @@ class TrainingSetVC: UICollectionViewController, NSFetchedResultsControllerDeleg
             break
         }
     }
-
-    
-
-
 }

@@ -31,10 +31,11 @@ class NetworkUtil {
     
     /// Create a URLComponent and array of query items and return URL from the component as an optional
     class func buildTagQuery(_ tag: String, pageNumber: Int) -> URL? {
-        print("-->",pageNumber)
+        let perPageValue = UserDefaults.standard.value(forKey: "perPage") as! Double
+        let perPageString = String(perPageValue)
         let queryItemTag = URLQueryItem(name: "tags", value: tag)
         let queryItemText = URLQueryItem(name: "text", value: tag)
-        let queryItemPerPage = URLQueryItem(name: "per_page", value: Constants.perPage)
+        let queryItemPerPage = URLQueryItem(name: "per_page", value: perPageString)
         let queryItemPage = URLQueryItem(name: "page", value: "\(pageNumber)")
         let queryItemMethod = URLQueryItem(name: "method", value: "flickr.photos.search")
         let queryItemAPIKey = URLQueryItem(name: "api_key", value: Constants.apiKey)
@@ -58,7 +59,6 @@ class NetworkUtil {
     class func requestImageResources(tag: String, pageNumber: Int, completion: @escaping
 
         ((FlickrSearchResult?, Error?) -> Void)) {
-        print("---",pageNumber)
         let success = 200...299
         guard let url = buildTagQuery(tag, pageNumber: pageNumber) else {return}
         let task = buildDataTask(url: url) { (data, response, error) in

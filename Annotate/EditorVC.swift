@@ -12,14 +12,14 @@ import MessageUI
 
 class AnnotationStore: NSObject {
 
-    static func pullArchive(trainingSet: TrainingSet) {
-        guard let name = trainingSet.name else {
-            return
-        }
-        if let data = UserDefaults.standard.object(forKey: name) as? Data {
-            let setInfo = NSKeyedUnarchiver.unarchiveObject(with: data)
-        }
-    }
+//    static func pullArchive(trainingSet: TrainingSet) {
+//        guard let name = trainingSet.name else {
+//            return
+//        }
+//        if let data = UserDefaults.standard.object(forKey: name) as? Data {
+//            let setInfo = NSKeyedUnarchiver.unarchiveObject(with: data)
+//        }
+//    }
     
     
     static func saveModel(trainingSet: TrainingSet, photo: Photo) {
@@ -33,6 +33,7 @@ class EditorVC: UIViewController {
     var trainingSet:TrainingSet!
     var photo:Photo!
     var imageView: UIImageView!
+    var passedImage: UIImage?
     var objectSelectionTap = UILongPressGestureRecognizer()
     var imageName = ""
     var objectName = ""
@@ -44,18 +45,21 @@ class EditorVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        var currentImage = imageView.image
-        currentImage = currentImage!.resized(toWidth: self.view.frame.width)
+    
+        guard let currentImage = passedImage?.resized(toWidth: self.view.frame.width) else {return}
+        imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFit
         imageView.image = currentImage
-        view.addSubview(imageView)
+
         let entity = NSEntityDescription.entity(forEntityName: "Photo", in: DataController.shared.mainContext)
         photo = Photo(entity: entity!, insertInto: DataController.shared.mainContext)
-        photo.data = currentImage?.jpegData(compressionQuality: 1.0)
+        photo.data = currentImage.jpegData(compressionQuality: 1.0)
         
         objectSelectionTap = UILongPressGestureRecognizer(target: self, action: #selector(EditorVC.tap(sender:)))
         
         self.view.addGestureRecognizer(objectSelectionTap)
         
+        view.addSubview(imageView)
         configureContraints()
     }
     

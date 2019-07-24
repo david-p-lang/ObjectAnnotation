@@ -27,20 +27,18 @@ class TrainingSetCell: UICollectionViewCell {
     
     var stack:UIStackView = {
         let stack = UIStackView()
+        stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = UIColor.clear
+        nameLabel.backgroundColor = .yellow
+
+        //stack configuration
         let frame = self.contentView.frame
         stack = UIStackView(frame: frame)
         stack.axis = .vertical
-        
-        imageView.backgroundColor = .clear
-        nameLabel.backgroundColor = .yellow
-        stack.backgroundColor = .orange
-        
         stack.distribution = .fill
         stack.spacing = 0
         stack.translatesAutoresizingMaskIntoConstraints = false
@@ -49,16 +47,24 @@ class TrainingSetCell: UICollectionViewCell {
         stack.addArrangedSubview(imageView)
         addSubview(stack)
 
-        
+        //Set the constraints for the cell contents
         stack.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
         stack.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
         stack.heightAnchor.constraint(equalToConstant: self.bounds.height).isActive = true
         stack.widthAnchor.constraint(equalToConstant: self.bounds.width).isActive = true
-        
+          
+    }
+    
+    func batchContraints(){
+        imageView.heightAnchor.constraint(equalToConstant: self.bounds.height).isActive = true
+        imageView.widthAnchor.constraint(equalToConstant: self.bounds.width).isActive = true
+    }
+    
+    func trainingConstraints() {
         imageView.heightAnchor.constraint(equalToConstant: self.bounds.height - 30).isActive = true
         imageView.widthAnchor.constraint(equalToConstant: self.bounds.width).isActive = true
-        
     }
+    
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
