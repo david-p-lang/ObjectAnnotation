@@ -6,6 +6,8 @@ Image annotation tool for a createML app object detection project
   border: none;
   background: none;
 }
+
+<img src="https://github.com/favicon.ico" width="48">
 ![Adding Training Set](/images/AddSet.png)
 ![GitHub Logo](/images/ImageSelection.png)
 ![GitHub Logo](/images/LabeledImages.png)
