@@ -39,6 +39,8 @@ class EditorVC: UIViewController {
         guard let currentImage = passedImage?.resized(toWidth: self.view.frame.width) else {return}
         imageView = UIImageView()
         imageView.backgroundColor = .white
+        
+        //ensure correct image scale
         imageView.contentMode = .scaleAspectFit
         imageView.image = currentImage
 
@@ -46,8 +48,8 @@ class EditorVC: UIViewController {
         photo = Photo(entity: entity!, insertInto: DataController.shared.mainContext)
         photo.data = currentImage.jpegData(compressionQuality: 1.0)
         
+        //declare the gesture recognizer and add to the view
         objectSelectionTap = UILongPressGestureRecognizer(target: self, action: #selector(EditorVC.tap(sender:)))
-        
         self.view.addGestureRecognizer(objectSelectionTap)
         
         view.addSubview(imageView)
