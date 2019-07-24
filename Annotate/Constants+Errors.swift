@@ -13,9 +13,15 @@ struct Constants {
     static let placeholderKey = "placeholder"
     static let perPage = "15"
     static let responseFormat = "json"
+    
+    //Enter your APIKey below
     static let apiKey = ""
+    
+    //create a default set reference
     static let defaultSetName = "Default Set"
     static let perPageKey = "perPage"
+    
+    //the settings icon unicode character
     static let wheelWithoutHubKey = "\u{2699}"
 }
 

@@ -72,6 +72,7 @@ class EditorVC: UIViewController {
     }
     
     fileprivate func rectTheObject(_ locations: [CGPoint]) {
+        
         //create a drawing layer
         let rect = CAShapeLayer()
         
@@ -116,6 +117,7 @@ class EditorVC: UIViewController {
         
         let location = sender.location(in: view)
         
+        //use began sender state for gesture detection
         switch sender.state {
         case .began:
         
