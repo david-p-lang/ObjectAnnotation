@@ -72,6 +72,7 @@ class EditorVC: UIViewController {
     }
     
     fileprivate func rectTheObject(_ locations: [CGPoint]) {
+        //create a drawing layer
         let rect = CAShapeLayer()
         
         //get a handle on the relative rectangle points
