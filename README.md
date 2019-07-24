@@ -5,7 +5,7 @@ Image annotation tool for a createML app object detection project.
 
 * clone the github project
 * open the project directory in terminal
-* pod update 
+* enter the command - pod update - in terminal 
 * close the .xcodeproj if open
 * open the workspace file in the project directory
 * enter your flickr apikey in the Constants.swift file
