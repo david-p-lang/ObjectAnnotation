@@ -45,7 +45,6 @@ class ImageBatchVC: UICollectionViewController {
     @objc func refresh() {
         deletePhotos()
         pages += 1
-        print("update pages", pages)
         search(tag, pageNumber: pages)
             NetworkUtil.requestImageResources(
                 tag: self.tag,
@@ -77,7 +76,6 @@ class ImageBatchVC: UICollectionViewController {
     
     func search(_ term: String, pageNumber: Int) {
         NetworkUtil.requestImageResources(tag: term, pageNumber: pageNumber) { (flickrSearchResult, error) in
-            print("-",pageNumber)
             guard error == nil, let flickrSearchResult = flickrSearchResult else {return}
             self.flickrSearchResult = flickrSearchResult
             self.setFlickrUrls()

@@ -73,11 +73,14 @@ class EditorVC: UIViewController {
     
     fileprivate func rectTheObject(_ locations: [CGPoint]) {
         let rect = CAShapeLayer()
+        
+        //get a handle on the relative rectangle points
         let leftPoint = locations[0].x < locations[1].x ? locations[0] : locations[1]
         let rightPoint = locations[0].x > locations[1].x ? locations[0] : locations[1]
         let lowerPoint = locations[0].y < locations[1].y ? locations[0] : locations[1]
         let upperPoint = locations[0].y < locations[1].y ? locations[1] : locations[0]
         
+        //define some annotation attributes for drawing boundry and 
         let centerX = (rightPoint.x + leftPoint.x) / 2
         let centerY = (upperPoint.y + lowerPoint.y) / 2
         let xDiff = rightPoint.x - leftPoint.x
@@ -138,6 +141,8 @@ class EditorVC: UIViewController {
         alert.addTextField { (textField) in
             textField.placeholder = "Object Name"
         }
+        
+        //add coordinates to the model and save, pop back to the last view controller
         alert.addAction (UIAlertAction(title: "Save", style: .default) { (alertAction) in
             let textField = alert.textFields![0]
             self.objectName = textField.text ?? ""

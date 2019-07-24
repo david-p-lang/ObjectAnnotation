@@ -140,14 +140,15 @@ class TrainingSetVC: UICollectionViewController, NSFetchedResultsControllerDeleg
     /// - Parameter photo: Coredata photo
     /// - Returns: the codable struct Image info defined in the JSON structs file
     func encodeAnnotation(photo: Photo) -> ImageInfo {
-        let annotation = Annotation(label: photo.label!, coordinates: Coordinates(x: Int(photo.x), y: Int(photo.y), width: Int(photo.width), height: Int(photo.height)))
-        let imageInfo = ImageInfo(image: photo.name!, annotations: [annotation])
+        let annotation = Annotation(label: photo.label ?? "", coordinates: Coordinates(x: Int(photo.x), y: Int(photo.y), width: Int(photo.width), height: Int(photo.height)))
+        let imageInfo = ImageInfo(image: photo.name ?? "", annotations: [annotation])
         return imageInfo
     }
     
     /// Utilize the standard alert to transmit or save the training set
     func airDrop() {
-        let controller = UIActivityViewController(activityItems: [dirURL!], applicationActivities: nil)
+        guard let dirURL = dirURL else { return }
+        let controller = UIActivityViewController(activityItems: [dirURL], applicationActivities: nil)
         controller.excludedActivityTypes = [.postToTencentWeibo, .postToFacebook, .postToTwitter, .postToVimeo, .openInIBooks, .addToReadingList, .copyToPasteboard, .assignToContact, .saveToCameraRoll, .message, .print, .markupAsPDF]
         self.present(controller, animated: true, completion: nil)
     }
@@ -155,23 +156,25 @@ class TrainingSetVC: UICollectionViewController, NSFetchedResultsControllerDeleg
 
     /// build the folder with image data and the annotations.json file
     @objc func shareSet() {
-            guard let trainingSet = self.setResultsController.fetchedObjects?.first else {return}
-            guard let photos = trainingSet.photo?.allObjects as? [Photo] else {return}
-            
-            guard let destinationFolder = self.checkDirectory() else {return}
-            print(destinationFolder)
-            var jsonAnnotation = Data()
-            var annotationSet = [ImageInfo]()
-            
-            photos.forEach { (photo) in
-                guard let _ = self.saveImage(photo: photo, destination: destinationFolder) else {return}
-                annotationSet.append(self.encodeAnnotation(photo: photo))
-                self.setDataArray.append(photo.data!)
-            }
-            jsonAnnotation = self.encodeAnnotationSet(annotationSet: annotationSet)
-            guard let _ = self.saveAnnotationFile(data: jsonAnnotation, destination: destinationFolder) else {return}
-            self.setDataArray.append(jsonAnnotation)
-            self.airDrop()
+        guard let trainingSet = self.setResultsController.fetchedObjects?.first else {return}
+        guard let photos = trainingSet.photo?.allObjects as? [Photo] else {return}
+        
+        guard let destinationFolder = self.checkDirectory() else {return}
+        var jsonAnnotation = Data()
+        var annotationSet = [ImageInfo]()
+        
+        photos.forEach { (photo) in
+            guard let _ = self.saveImage(photo: photo, destination: destinationFolder) else {return}
+            annotationSet.append(self.encodeAnnotation(photo: photo))
+            guard let photoData = photo.data else {return}
+            self.setDataArray.append(photoData)
+        }
+        jsonAnnotation = self.encodeAnnotationSet(annotationSet: annotationSet)
+        guard let _ = self.saveAnnotationFile(data: jsonAnnotation, destination: destinationFolder) else {return}
+        self.setDataArray.append(jsonAnnotation)
+        
+        //air drop or other method of saving transmitting as allowed
+        self.airDrop()
     }
     
     @objc func addPhoto() {
