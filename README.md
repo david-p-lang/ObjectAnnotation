@@ -3,6 +3,13 @@ Image annotation tool for a createML app object detection project.
 
 <b>Installation</b>
 
+*clone the github project
+*open the project directory in terminal
+*pod update 
+*close the .xcodeproj if open
+*open the workspace file in the project directory
+*enter you flickr apikey in the Constants.swift file
+
 <b>Description</b>
 
 The CreateML App is one of the Xcode Developer Tools when using the Xcode beta along with the Macos Catalina beta. This app allows users to create training sets for createML object detection. 
