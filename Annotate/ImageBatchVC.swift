@@ -76,7 +76,18 @@ class ImageBatchVC: UICollectionViewController {
     
     func search(_ term: String, pageNumber: Int) {
         NetworkUtil.requestImageResources(tag: term, pageNumber: pageNumber) { (flickrSearchResult, error) in
-            guard error == nil, let flickrSearchResult = flickrSearchResult else {return}
+            if let error = error {
+                DispatchQueue.main.async {
+                    self.displayAlert(error)
+                }
+                return
+            }
+            guard let flickrSearchResult = flickrSearchResult else {
+                DispatchQueue.main.async {
+                    self.displayAlert(ConnectionError.connectionFailure)
+                }
+                return
+            }
             self.flickrSearchResult = flickrSearchResult
             self.setFlickrUrls()
         }
