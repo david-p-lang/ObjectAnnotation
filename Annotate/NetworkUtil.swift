@@ -63,22 +63,40 @@ class NetworkUtil {
         guard let url = buildTagQuery(tag, pageNumber: pageNumber) else {return}
         let task = buildDataTask(url: url) { (data, response, error) in
             guard error == nil, let data = data else {
+                
+                print("error nil and data +")
                 completion(nil, error!)
                 return
             }
             guard let statusCode = (response as? HTTPURLResponse)?.statusCode, success.contains(statusCode) else {
-                completion(nil, ConnectionError.connectionFailure)
+                completion(nil, error)
                 return
             }
             let flickrSearchDecoder = JSONDecoder()
             do {
                 let flickrResponseData = try flickrSearchDecoder.decode(FlickrSearchResult.self, from: data as! Data)
+                if flickrResponseData.stat == "fail" {
+                    let error = handleStatFail(data: data as! Data)
+                    completion(nil, error)
+                }
                 completion(flickrResponseData, nil)
             } catch {
                 completion(nil, error)
             }
         }
         task.resume()
+    }
+    
+    class func handleStatFail(data: Data) -> NSError {
+        do {
+            let flickrErrorData = try JSONDecoder().decode(FlickrErrorResult.self, from: data )
+            let message = flickrErrorData.message
+            let code = flickrErrorData.code
+            let error = NSError(domain: "Error", code: code, userInfo: [NSLocalizedDescriptionKey: message])
+            return error
+        } catch {
+            return NSError(domain: "Error", code: -1, userInfo: [NSLocalizedDescriptionKey: "Search Error"])
+        }
     }
     
     /// Create the URL for the specific image request
