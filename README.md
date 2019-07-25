@@ -1,4 +1,7 @@
 # ObjectAnnotation
+
+This project is Xcode 10.0-compatible, deployment target 12.2
+
 Image annotation tool for a createML app object detection project.
 
 <b>Installation</b>
