@@ -8,6 +8,12 @@
 
 import Foundation
 
+struct FlickrErrorResult: Codable {
+    let stat: String
+    let code: Int
+    let message: String
+}
+
 struct FlickrSearchResult: Codable {
     let photos: FlickrPagesResult?
     let stat: String

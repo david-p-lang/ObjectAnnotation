@@ -31,7 +31,7 @@ class NetworkUtil {
     
     /// Create a URLComponent and array of query items and return URL from the component as an optional
     class func buildTagQuery(_ tag: String, pageNumber: Int) -> URL? {
-        let perPageValue = UserDefaults.standard.value(forKey: "perPage") as! Double
+        let perPageValue = UserDefaults.standard.value(forKey: "perPage") as? Double ?? 12.0
         let perPageString = String(perPageValue)
         let queryItemTag = URLQueryItem(name: "tags", value: tag)
         let queryItemText = URLQueryItem(name: "text", value: tag)
@@ -67,18 +67,34 @@ class NetworkUtil {
                 return
             }
             guard let statusCode = (response as? HTTPURLResponse)?.statusCode, success.contains(statusCode) else {
-                completion(nil, ConnectionError.connectionFailure)
+                completion(nil, error)
                 return
             }
             let flickrSearchDecoder = JSONDecoder()
             do {
                 let flickrResponseData = try flickrSearchDecoder.decode(FlickrSearchResult.self, from: data as! Data)
+                if flickrResponseData.stat == "fail" {
+                    let error = handleStatFail(data: data as! Data)
+                    completion(nil, error)
+                }
                 completion(flickrResponseData, nil)
             } catch {
                 completion(nil, error)
             }
         }
         task.resume()
+    }
+    
+    class func handleStatFail(data: Data) -> NSError {
+        do {
+            let flickrErrorData = try JSONDecoder().decode(FlickrErrorResult.self, from: data )
+            let message = flickrErrorData.message
+            let code = flickrErrorData.code
+            let error = NSError(domain: "Error", code: code, userInfo: [NSLocalizedDescriptionKey: message])
+            return error
+        } catch {
+            return NSError(domain: "Error", code: -1, userInfo: [NSLocalizedDescriptionKey: "Search Error"])
+        }
     }
     
     /// Create the URL for the specific image request
