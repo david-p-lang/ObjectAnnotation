@@ -63,6 +63,8 @@ class NetworkUtil {
         guard let url = buildTagQuery(tag, pageNumber: pageNumber) else {return}
         let task = buildDataTask(url: url) { (data, response, error) in
             guard error == nil, let data = data else {
+                
+                print("error nil and data +")
                 completion(nil, error!)
                 return
             }
