@@ -126,6 +126,7 @@ class EditorVC: UIViewController {
             showGestures(location, radius: 75, subLayer: reticleOuter)
             showGestures(location, radius: 3, subLayer: reticleInner)
             
+            //handle points based on whether this is the first or second point
             if opposingPoints.count == 0 {
                 opposingPoints.append(location)
             } else if opposingPoints.count == 1 {
@@ -134,7 +135,6 @@ class EditorVC: UIViewController {
                 reticleOuter = CAShapeLayer()
                 rectTheObject(opposingPoints)
                 opposingPoints.removeAll()
-
             } else {
                 opposingPoints.removeAll()
             }
@@ -175,6 +175,8 @@ class EditorVC: UIViewController {
             try? DataController.shared.mainContext.save()
             self.navigationController?.popViewController(animated: true)
         })
+        
+        
         let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil)
         alert.addAction(cancelAction)
         self.present(alert, animated: true, completion: nil)

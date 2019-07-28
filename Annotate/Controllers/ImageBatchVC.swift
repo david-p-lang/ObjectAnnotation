@@ -68,6 +68,12 @@ class ImageBatchVC: UICollectionViewController {
             self.tag = text
             self.search(text, pageNumber: self.pages)
         })
+        
+        alert.addAction(UIAlertAction(title: "Media", style: .default, handler: { (alertAction) in
+            let vC = MediaVC(nibName: nil, bundle: nil)
+            self.navigationController?.pushViewController(vC, animated: true)
+        }))
+        
         let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         alert.addAction(searchAction)
         alert.addAction(cancel)
