@@ -131,6 +131,8 @@ class EditorVC: UIViewController {
                 opposingPoints.append(location)
             } else if opposingPoints.count == 1 {
                 opposingPoints.append(location)
+                
+                //Initialize the CAShapelayers
                 reticleInner = CAShapeLayer()
                 reticleOuter = CAShapeLayer()
                 rectTheObject(opposingPoints)
@@ -177,7 +179,13 @@ class EditorVC: UIViewController {
         })
         
         
-        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil)
+        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: { (alertAction) in
+            //reset the reticles and rectangle in case of cancel
+            self.reticleInner = CAShapeLayer()
+            self.reticleOuter = CAShapeLayer()
+            self.opposingPoints.removeAll()
+            self.imageView.layer.sublayers = nil
+        })
         alert.addAction(cancelAction)
         self.present(alert, animated: true, completion: nil)
     }

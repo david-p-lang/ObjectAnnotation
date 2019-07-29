@@ -10,7 +10,8 @@ import Foundation
 
 struct Constants {
     static let Cell = "Cell"
-    static let placeholderKey = "placeholder"
+    
+    //Flickr search API values
     static let perPage = "15"
     static let responseFormat = "json"
     
@@ -21,7 +22,7 @@ struct Constants {
     static let defaultSetName = "Default Set"
     static let perPageKey = "perPage"
     
-    //the settings icon unicode character
+    //the settings icon unicode character for APP UI purposes
     static let wheelWithoutHubKey = "\u{2699}"
 }
 
