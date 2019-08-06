@@ -70,7 +70,9 @@ class ImageBatchVC: UICollectionViewController {
         })
         
         alert.addAction(UIAlertAction(title: "Media", style: .default, handler: { (alertAction) in
-            let vC = MediaVC(nibName: nil, bundle: nil)
+            let flowLayout = UICollectionViewFlowLayout()
+            let vC = MediaCVC(collectionViewLayout: flowLayout)
+            vC.collectionViewFlowLayout = flowLayout
             self.navigationController?.pushViewController(vC, animated: true)
         }))
         

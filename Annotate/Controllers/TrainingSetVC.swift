@@ -203,9 +203,9 @@ class TrainingSetVC: UICollectionViewController, NSFetchedResultsControllerDeleg
         
         //provide prompt for the user to add images if none are present
         if number == 0 {
-            collectionView.setEmptyMessage("Add images for training")
+            collectionView.setEmptyMessage(NSLocalizedString("Click + to add training set", comment: ""))
         } else {
-            collectionView.setEmptyMessage("")
+            collectionView.setEmptyMessage(NSLocalizedString("", comment: ""))
         }
         
         return number

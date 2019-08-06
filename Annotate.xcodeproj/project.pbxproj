@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1B1BAF0822F8F96A0050FEFF /* MediaCVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B1BAF0722F8F96A0050FEFF /* MediaCVC.swift */; };
+		1B1BAF0A22F8FF910050FEFF /* GridViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B1BAF0922F8FF910050FEFF /* GridViewCell.swift */; };
 		1BC9021C22E89DFF00D4502C /* Controller+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BC9021B22E89DFF00D4502C /* Controller+Extensions.swift */; };
 		1BCCB18C22E777760041F2D2 /* SettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BCCB18B22E777760041F2D2 /* SettingsVC.swift */; };
 		1BEC561C22D1902F001FDD65 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BEC561B22D1902F001FDD65 /* AppDelegate.swift */; };
@@ -23,10 +25,11 @@
 		630B414622D4E7D200BF1A07 /* Constants+Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630B414522D4E7D200BF1A07 /* Constants+Errors.swift */; };
 		630B414822D4E88B00BF1A07 /* JSONStructs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630B414722D4E88B00BF1A07 /* JSONStructs.swift */; };
 		630B414C22D4F55500BF1A07 /* EditorVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630B414B22D4F55500BF1A07 /* EditorVC.swift */; };
-		636EDC7C22ED20A10091632D /* MediaVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636EDC7B22ED20A10091632D /* MediaVC.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1B1BAF0722F8F96A0050FEFF /* MediaCVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MediaCVC.swift; path = ../../../../../../System/Volumes/Data/Users/davidlang/Documents/ObjectAnnotation/Annotate/Controllers/MediaCVC.swift; sourceTree = "<group>"; };
+		1B1BAF0922F8FF910050FEFF /* GridViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridViewCell.swift; sourceTree = "<group>"; };
 		1BC9021B22E89DFF00D4502C /* Controller+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Controller+Extensions.swift"; sourceTree = "<group>"; };
 		1BCCB18B22E777760041F2D2 /* SettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVC.swift; sourceTree = "<group>"; };
 		1BEC561822D1902F001FDD65 /* Annotate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Annotate.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -44,7 +47,6 @@
 		630B414522D4E7D200BF1A07 /* Constants+Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Constants+Errors.swift"; sourceTree = "<group>"; };
 		630B414722D4E88B00BF1A07 /* JSONStructs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONStructs.swift; sourceTree = "<group>"; };
 		630B414B22D4F55500BF1A07 /* EditorVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorVC.swift; sourceTree = "<group>"; };
-		636EDC7B22ED20A10091632D /* MediaVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MediaVC.swift; path = ../../../../../../System/Volumes/Data/Users/David/Documents/ObjectAnnotation/Annotate/Controllers/MediaVC.swift; sourceTree = "<group>"; };
 		6EE0653FD45BA58F4D051E8C /* Pods-Annotate.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Annotate.release.xcconfig"; path = "Target Support Files/Pods-Annotate/Pods-Annotate.release.xcconfig"; sourceTree = "<group>"; };
 		C02C6CF19E911DC6C183869A /* Pods-Annotate.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Annotate.debug.xcconfig"; path = "Target Support Files/Pods-Annotate/Pods-Annotate.debug.xcconfig"; sourceTree = "<group>"; };
 		D3D1484330CD33435D62B8B7 /* Pods_Annotate.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Annotate.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -86,6 +88,7 @@
 				636EDC7A22ED18A50091632D /* Controllers */,
 				1BEC561B22D1902F001FDD65 /* AppDelegate.swift */,
 				1BEC563822D290B7001FDD65 /* TrainingSetCell.swift */,
+				1B1BAF0922F8FF910050FEFF /* GridViewCell.swift */,
 				1BEC562522D19032001FDD65 /* Assets.xcassets */,
 				1BEC562722D19032001FDD65 /* LaunchScreen.storyboard */,
 				1BEC562A22D19032001FDD65 /* Info.plist */,
@@ -115,7 +118,7 @@
 				630B414122D4E0F900BF1A07 /* ImageBatchVC.swift */,
 				1BC9021B22E89DFF00D4502C /* Controller+Extensions.swift */,
 				630B414B22D4F55500BF1A07 /* EditorVC.swift */,
-				636EDC7B22ED20A10091632D /* MediaVC.swift */,
+				1B1BAF0722F8F96A0050FEFF /* MediaCVC.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -244,6 +247,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1BC9021C22E89DFF00D4502C /* Controller+Extensions.swift in Sources */,
+				1B1BAF0822F8F96A0050FEFF /* MediaCVC.swift in Sources */,
 				1BCCB18C22E777760041F2D2 /* SettingsVC.swift in Sources */,
 				1BEC563922D290B7001FDD65 /* TrainingSetCell.swift in Sources */,
 				630B414222D4E0F900BF1A07 /* ImageBatchVC.swift in Sources */,
@@ -252,8 +256,8 @@
 				630B414822D4E88B00BF1A07 /* JSONStructs.swift in Sources */,
 				630B414C22D4F55500BF1A07 /* EditorVC.swift in Sources */,
 				630B414422D4E64300BF1A07 /* NetworkUtil.swift in Sources */,
-				636EDC7C22ED20A10091632D /* MediaVC.swift in Sources */,
 				1BEC563122D25DC1001FDD65 /* DataController.swift in Sources */,
+				1B1BAF0A22F8FF910050FEFF /* GridViewCell.swift in Sources */,
 				1BEC562422D1902F001FDD65 /* Annotate.xcdatamodeld in Sources */,
 				1BEC561C22D1902F001FDD65 /* AppDelegate.swift in Sources */,
 				630B414622D4E7D200BF1A07 /* Constants+Errors.swift in Sources */,
