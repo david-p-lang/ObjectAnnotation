@@ -6,6 +6,8 @@ The above copyright notice and this permission notice shall be included in all c
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
+
+
 import UIKit
 
 class GridViewCell: UICollectionViewCell {
@@ -13,36 +15,31 @@ class GridViewCell: UICollectionViewCell {
     var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.backgroundColor = .orange
-//      imageView.image = UIImage(named: "placeholder")
         imageView.contentMode = UIView.ContentMode.scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
-//    var livePhotoBadgeImageView: UIImageView = {
-//        let imageView = UIImageView()
-//        imageView.backgroundColor = .red
-//
-////      imageView.contentMode = UIView.ContentMode.scaleAspectFit
-//        imageView.translatesAutoresizingMaskIntoConstraints = false
-//        return imageView
-//    }()
+
+    var fullSizedImage:UIImage = {
+        let image = UIImage()
+        return image
+    }()
     
     var representedAssetIdentifier: String!
     
     var thumbnailImage: UIImage! {
         didSet {
+            
             imageView.image = thumbnailImage
         }
     }
-//    var livePhotoBadgeImage: UIImage! {
-//        didSet {
-//            livePhotoBadgeImageView.image = livePhotoBadgeImage
-//        }
-//    }
+
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
         self.addSubview(imageView)
         
+        //contrain the imageview to fully utilize cell space
         imageView.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
         imageView.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
         imageView.heightAnchor.constraint(equalToConstant: self.bounds.height).isActive = true
@@ -56,6 +53,5 @@ class GridViewCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         imageView.image = nil
-        //livePhotoBadgeImageView.image = nil
     }
 }

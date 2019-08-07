@@ -24,11 +24,12 @@ class ImageBatchVC: UICollectionViewController {
         collectionView.backgroundColor = .white
         self.collectionView!.register(TrainingSetCell.self, forCellWithReuseIdentifier: Constants.Cell)
         configureNavigation()
-        searchPrompt()
+
     }
     
     override func viewWillAppear(_ animated: Bool) {
         collectionView.reloadData()
+        searchPrompt()
     }
     
     fileprivate func configureNavigation() {
@@ -73,6 +74,7 @@ class ImageBatchVC: UICollectionViewController {
             let flowLayout = UICollectionViewFlowLayout()
             let vC = MediaCVC(collectionViewLayout: flowLayout)
             vC.collectionViewFlowLayout = flowLayout
+            vC.trainingSet = self.trainingSet
             self.navigationController?.pushViewController(vC, animated: true)
         }))
         

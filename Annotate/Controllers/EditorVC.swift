@@ -37,8 +37,9 @@ class EditorVC: UIViewController {
         super.viewDidLoad()
     
         guard let currentImage = passedImage?.resized(toWidth: self.view.frame.width) else {return}
+        print("image resized", currentImage.size)
         imageView = UIImageView()
-        imageView.backgroundColor = .white
+        imageView.backgroundColor = .green
         
         //ensure correct image scale
         imageView.contentMode = .scaleAspectFit
@@ -197,8 +198,13 @@ extension UIImage {
 
     func resized(toWidth width: CGFloat) -> UIImage? {
         let canvas = CGSize(width: width, height: CGFloat(ceil(width/size.width * size.height)))
-        return UIGraphicsImageRenderer(size: canvas, format: imageRendererFormat).image {
-            _ in draw(in: CGRect(origin: .zero, size: canvas))
+//        return UIGraphicsImageRenderer(size: canvas, format: imageRendererFormat).image {
+//            _ in draw(in: CGRect(origin: .zero, size: canvas))
+//        }
+        let renderer = UIGraphicsImageRenderer(size: canvas)
+        let image = renderer.image { (_) in
+            draw(in: CGRect(origin: .zero, size: canvas))
         }
+        return image
     }
 }
