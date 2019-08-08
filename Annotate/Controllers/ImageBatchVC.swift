@@ -17,6 +17,7 @@ class ImageBatchVC: UICollectionViewController {
     var imagerUrls = [URL]()
     var pages = 1
     var tag = ""
+    var toolBar:UIToolbar!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,11 +25,30 @@ class ImageBatchVC: UICollectionViewController {
         collectionView.backgroundColor = .white
         self.collectionView!.register(TrainingSetCell.self, forCellWithReuseIdentifier: Constants.Cell)
         configureNavigation()
+    }
+    
+    @objc func openPhotoLibrary() {
+        // declare a flowlayout
+        let flowLayout = UICollectionViewFlowLayout()
+        
+        // declare a new collectionviewcontroller with the flowlayout initializer
+        let vC = MediaCVC(collectionViewLayout: flowLayout)
+        //vC.collectionViewFlowLayout = flowLayout
+        
+        //pass the training set
+        vC.trainingSet = self.trainingSet
+        
+        //push the viewcontroller onto the navigation stack
+        self.navigationController?.pushViewController(vC, animated: true)
 
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        
+        //reload the data each time we come back to the view controller
         collectionView.reloadData()
+        
+        // prompt the user on how to proceed
         searchPrompt()
     }
     

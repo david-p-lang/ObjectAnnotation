@@ -148,6 +148,7 @@ class TrainingSetVC: UICollectionViewController, NSFetchedResultsControllerDeleg
     /// Utilize the standard alert to transmit or save the training set
     func airDrop() {
         guard let dirURL = dirURL else { return }
+        print(dirURL)
         let controller = UIActivityViewController(activityItems: [dirURL], applicationActivities: nil)
         controller.excludedActivityTypes = [.postToTencentWeibo, .postToFacebook, .postToTwitter, .postToVimeo, .openInIBooks, .addToReadingList, .copyToPasteboard, .assignToContact, .saveToCameraRoll, .message, .print, .markupAsPDF]
         self.present(controller, animated: true, completion: nil)
