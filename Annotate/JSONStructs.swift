@@ -55,6 +55,15 @@ struct Coordinates: Codable {
     let y: Int
     let width: Int
     let height: Int
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(x, forKey: .x)
+        try container.encode(y, forKey: .y)
+        try container.encode(width, forKey: .width)
+        try container.encode(height, forKey: .height)
+        
+    }
 }
 
 struct AnnotationSet: Codable {
@@ -66,18 +75,32 @@ struct AnnotatedImage : Codable {
     let name: String
     let label: String
     let x: Int
-    let y: Int
+    //let y: Int
+
     let width: Int
     let height: Int
+    
+    init(name: String, label: String, x: Int, y: Int, width: Int, height: Int) {
+        self.name = name
+        self.label = label
+        self.x = x
+        //self.y = y
+        self.width = width
+        self.height = height
+    }
 }
 
 extension AnnotatedImage {
-    enum CodingKeys: String, CodingKey {
+    enum CodingKeys: CodingKey {
         case name
         case label
         case x
-        case y
+        //case y
+
         case width
         case height
     }
+    
+
+    
 }

@@ -92,7 +92,7 @@ class EditorVC: UIViewController {
         let yDiff = upperPoint.y - lowerPoint.y
         
         //set the coordinates for core data
-        let coordinates = Coordinates(x: Int(centerX), y: Int(centerY), width: Int(xDiff), height: Int(yDiff))
+        let coordinates = Coordinates(x: Int(centerX), y: Int(photo.y), width: Int(xDiff), height: Int(yDiff))
         
         //set the shapelayer path to draw
         rect.path = UIBezierPath(rect: CGRect(x: -(xDiff / 2), y: -(yDiff / 2), width: xDiff, height: yDiff)).cgPath
@@ -171,7 +171,7 @@ class EditorVC: UIViewController {
             self.photo.label = self.objectName
             self.photo.name = String(self.photo.hash) + ".jpg"
             self.photo.x = Int16(coordinates.x)
-            self.photo.y = Int16(coordinates.y)
+            //self.photo.y = Int16(coordinates.y)
             self.photo.width = Int16(coordinates.width)
             self.photo.height = Int16(coordinates.height)
             AnnotationStore.saveModel(trainingSet: self.trainingSet, photo: self.photo)

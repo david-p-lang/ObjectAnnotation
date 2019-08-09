@@ -14,6 +14,7 @@ class TrainingSetCell: UICollectionViewCell {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "placeholder")
         imageView.contentMode = UIView.ContentMode.scaleAspectFit
+        imageView.backgroundColor = .black
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
@@ -33,7 +34,9 @@ class TrainingSetCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        nameLabel.backgroundColor = .yellow
+        nameLabel.backgroundColor = .black
+        nameLabel.textColor = .white
+        nameLabel.textAlignment = .center
 
         //stack configuration
         let frame = self.contentView.frame
@@ -41,6 +44,7 @@ class TrainingSetCell: UICollectionViewCell {
         stack.axis = .vertical
         stack.distribution = .fill
         stack.spacing = 0
+        stack.backgroundColor = .black
         stack.translatesAutoresizingMaskIntoConstraints = false
         
         //stack.addArrangedSubview(nameLabel)

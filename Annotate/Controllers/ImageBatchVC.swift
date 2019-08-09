@@ -49,12 +49,17 @@ class ImageBatchVC: UICollectionViewController {
         collectionView.reloadData()
         
         // prompt the user on how to proceed
-        searchPrompt()
+        //searchPrompt()
     }
     
     fileprivate func configureNavigation() {
+        
+        
         self.navigationItem.title = "Select Image"
+        
         let refreshButton = UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(ImageBatchVC.refresh))
+        
+        
         self.navigationItem.rightBarButtonItems = [refreshButton]
     }
     

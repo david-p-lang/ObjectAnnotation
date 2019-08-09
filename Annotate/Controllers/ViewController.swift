@@ -167,7 +167,8 @@ class ViewController: UITableViewController {
         let height = view.bounds.height / 5
         //create the cell size
         flowLayout.itemSize = CGSize(width: width, height: height)
-        let viewController = TrainingSetVC(collectionViewLayout: flowLayout)
+        //let viewController = TrainingSetVC(collectionViewLayout: flowLayout)
+        let viewController = TrainingSetVC(nibName: nil, bundle: nil)
         
         //pass the training set to the
         viewController.trainingSet = trainingSetResultsController.fetchedObjects?.first

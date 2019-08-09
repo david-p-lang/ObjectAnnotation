@@ -11,20 +11,48 @@ import CoreData
 import Kingfisher
 import MessageUI
 
-class TrainingSetVC: UICollectionViewController, NSFetchedResultsControllerDelegate, MFMailComposeViewControllerDelegate {
+class TrainingSetVC: UIViewController, NSFetchedResultsControllerDelegate, MFMailComposeViewControllerDelegate {
     
     var trainingSet: TrainingSet!
     var setResultsController:NSFetchedResultsController<TrainingSet>!
     var setDataArray = [Data]()
     var dirURL:URL!
+    var collectionView:UICollectionView!
+    var stackView:UIStackView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
     
         //register the custom collection view cell
-        self.collectionView.register(TrainingSetCell.self, forCellWithReuseIdentifier: Constants.Cell)
-
+        let flowLayout = UICollectionViewFlowLayout()
+        
+        let width = view.bounds.width / 2.1
+        let height = view.bounds.height / 5
+        //create the cell size
+        flowLayout.itemSize = CGSize(width: width, height: height)
+        collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
+        self.view.backgroundColor = .black
+        
+        stackView = UIStackView(frame: self.view.frame)
+        stackView.backgroundColor = .black
+        self.view.addSubview(stackView)
+        stackView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        stackView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
+        stackView.heightAnchor.constraint(equalTo: self.view.heightAnchor).isActive = true
+        stackView.widthAnchor.constraint(equalTo: self.view.widthAnchor).isActive = true
+        
+        
+        stackView.addArrangedSubview(collectionView)
+        collectionView.widthAnchor.constraint(equalTo: stackView.widthAnchor).isActive = true
+        collectionView.centerXAnchor.constraint(equalTo: stackView.centerXAnchor).isActive = true
+        
         collectionView.backgroundColor = .white
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.register(TrainingSetCell.self, forCellWithReuseIdentifier: Constants.Cell)
+
+        
+        
         navigationSetup()
     }
     
@@ -127,6 +155,8 @@ class TrainingSetVC: UICollectionViewController, NSFetchedResultsControllerDeleg
     func encodeAnnotationSet(annotationSet: [ImageInfo]) -> Data {
         var allAnnotations = Data()
         let objectAnnotationEncoder = JSONEncoder()
+        objectAnnotationEncoder.outputFormatting = [.prettyPrinted]
+        //objectAnnotationEncoder.outputFormatting = .prettyPrinted
         do {
             allAnnotations = try objectAnnotationEncoder.encode(annotationSet)
         } catch {
@@ -179,6 +209,14 @@ class TrainingSetVC: UICollectionViewController, NSFetchedResultsControllerDeleg
     }
     
     @objc func addPhoto() {
+        
+        let flowLayout = UICollectionViewFlowLayout()
+        let vC = MediaCVC(collectionViewLayout: flowLayout)
+        vC.collectionViewFlowLayout = flowLayout
+        vC.trainingSet = self.trainingSet
+        self.navigationController?.pushViewController(vC, animated: true)
+
+        /*
         // create a flow layout for the TrainingSetVC collection view
         let flowLayout = UICollectionViewFlowLayout()
         
@@ -193,48 +231,11 @@ class TrainingSetVC: UICollectionViewController, NSFetchedResultsControllerDeleg
         // designate the training set for the next view controller
         vC.trainingSet = self.trainingSet
         navigationController?.pushViewController(vC, animated: true)
+         */
     }
-    
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        //determine the number of training sets
-        guard let trainingSetFromResults = setResultsController?.fetchedObjects else {return 0}
-        
-        //the total number of photos or 0 if nil
-        let number = trainingSetFromResults[0].photo?.count ?? 0
-        
-        //provide prompt for the user to add images if none are present
-        if number == 0 {
-            collectionView.setEmptyMessage(NSLocalizedString("Click + to add training set", comment: ""))
-        } else {
-            collectionView.setEmptyMessage(NSLocalizedString("", comment: ""))
-        }
-        
-        return number
-    }
-    
-    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.Cell, for: indexPath) as! TrainingSetCell
-        
-        // obtain the correct training set
-        guard let imageSet = setResultsController.fetchedObjects?.first else {return cell}
-        
-        // set the image for the given index path
-        let image = imageSet.photo?.allObjects[indexPath.row] as? Photo
-        
-        // obtain the actual image data for display and the object label
-        guard let imageData = image?.data, let label = image?.label else {return cell}
-        
-        // for this view controller we want to display the associated label with the image
-        cell.stack.addArrangedSubview(cell.nameLabel)
-        
-        //adapt the custom cell constraints for the namelabel
-        cell.trainingConstraints()
-        
-        cell.nameLabel.text = label
-        cell.imageView.image = UIImage(data: imageData)
-        return cell
-    }
+ 
 
+    ///handle changes to the data so that the collection view is updated
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         guard let newIndexPath = newIndexPath, let indexPath = indexPath else {return}
         switch (type) {
@@ -257,4 +258,44 @@ class TrainingSetVC: UICollectionViewController, NSFetchedResultsControllerDeleg
     }
 }
 
+extension TrainingSetVC: UICollectionViewDelegate, UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    //determine the number of training sets
+    guard let trainingSetFromResults = setResultsController?.fetchedObjects else {return 0}
+    
+    //the total number of photos or 0 if nil
+    let number = trainingSetFromResults[0].photo?.count ?? 0
+    
+    //provide prompt for the user to add images if none are present
+    if number == 0 {
+        collectionView.setEmptyMessage(NSLocalizedString("Click + to add training set", comment: ""))
+    } else {
+        collectionView.setEmptyMessage(NSLocalizedString("", comment: ""))
+    }
+    
+    return number
+}
 
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.Cell, for: indexPath) as! TrainingSetCell
+    
+    // obtain the correct training set
+    guard let imageSet = setResultsController.fetchedObjects?.first else {return cell}
+    
+    // set the image for the given index path
+    let image = imageSet.photo?.allObjects[indexPath.row] as? Photo
+    
+    // obtain the actual image data for display and the object label
+    guard let imageData = image?.data, let label = image?.label else {return cell}
+    
+    // for this view controller we want to display the associated label with the image
+    cell.stack.addArrangedSubview(cell.nameLabel)
+    
+    //adapt the custom cell constraints for the namelabel
+    cell.trainingConstraints()
+    
+    cell.nameLabel.text = label
+    cell.imageView.image = UIImage(data: imageData)
+    return cell
+}
+}

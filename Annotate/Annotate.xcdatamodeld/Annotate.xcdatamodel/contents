@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14490.99" systemVersion="19A512f" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14492.1" systemVersion="19A526h" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Object" representedClassName="Object" syncable="YES" codeGenerationType="class">
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="trainingSet" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TrainingSet" inverseName="object" inverseEntity="TrainingSet" syncable="YES"/>
+    </entity>
     <entity name="Photo" representedClassName="Photo" syncable="YES" codeGenerationType="class">
         <attribute name="data" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="height" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
@@ -12,10 +16,12 @@
     </entity>
     <entity name="TrainingSet" representedClassName="TrainingSet" syncable="YES" codeGenerationType="class">
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="object" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Object" inverseName="trainingSet" inverseEntity="Object" syncable="YES"/>
         <relationship name="photo" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Photo" inverseName="trainingSet" inverseEntity="Photo" syncable="YES"/>
     </entity>
     <elements>
         <element name="Photo" positionX="-54" positionY="0" width="128" height="165"/>
-        <element name="TrainingSet" positionX="-300.08203125" positionY="15.890625" width="128" height="75"/>
+        <element name="TrainingSet" positionX="-300.08203125" positionY="15.890625" width="128" height="90"/>
+        <element name="Object" positionX="-180" positionY="72" width="128" height="75"/>
     </elements>
 </model>
