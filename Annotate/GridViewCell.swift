@@ -14,7 +14,6 @@ class GridViewCell: UICollectionViewCell {
     
     var imageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.backgroundColor = .orange
         imageView.contentMode = UIView.ContentMode.scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView

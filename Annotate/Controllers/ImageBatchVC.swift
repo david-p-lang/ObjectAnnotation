@@ -23,6 +23,7 @@ class ImageBatchVC: UICollectionViewController {
         super.viewDidLoad()
         // Register cell classes
         collectionView.backgroundColor = .white
+        view.backgroundColor = .white
         self.collectionView!.register(TrainingSetCell.self, forCellWithReuseIdentifier: Constants.Cell)
         configureNavigation()
     }

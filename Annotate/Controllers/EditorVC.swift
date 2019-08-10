@@ -39,7 +39,6 @@ class EditorVC: UIViewController {
         guard let currentImage = passedImage?.resized(toWidth: self.view.frame.width) else {return}
         print("image resized", currentImage.size)
         imageView = UIImageView()
-        imageView.backgroundColor = .green
         
         //ensure correct image scale
         imageView.contentMode = .scaleAspectFit
@@ -146,6 +145,9 @@ class EditorVC: UIViewController {
         }
     }
     
+    /// JSON encoding to record the image name, object name and the location of the marked area in the image
+    ///
+    /// - Parameter coordinates: location of the annotated object
     func encodeAnnotation(coordinates: Coordinates) {
         let annotation = Annotation(label: objectName, coordinates: coordinates)
         let imageInfo = ImageInfo(image: imageName, annotations: [annotation])
@@ -157,6 +159,7 @@ class EditorVC: UIViewController {
         }
     }
     
+    //record or cancel the annotation
     func alertWithTF(coordinates: Coordinates) {
         let alert = UIAlertController(title: "Object Name", message: nil, preferredStyle: UIAlertController.Style.alert)
         alert.addTextField { (textField) in
@@ -171,7 +174,7 @@ class EditorVC: UIViewController {
             self.photo.label = self.objectName
             self.photo.name = String(self.photo.hash) + ".jpg"
             self.photo.x = Int16(coordinates.x)
-            //self.photo.y = Int16(coordinates.y)
+            self.photo.y = Int16(coordinates.y)
             self.photo.width = Int16(coordinates.width)
             self.photo.height = Int16(coordinates.height)
             AnnotationStore.saveModel(trainingSet: self.trainingSet, photo: self.photo)

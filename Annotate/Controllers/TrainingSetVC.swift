@@ -268,7 +268,7 @@ extension TrainingSetVC: UICollectionViewDelegate, UICollectionViewDataSource {
     
     //provide prompt for the user to add images if none are present
     if number == 0 {
-        collectionView.setEmptyMessage(NSLocalizedString("Click + to add training set", comment: ""))
+        collectionView.setEmptyMessage(NSLocalizedString("Click + to add training set images", comment: ""))
     } else {
         collectionView.setEmptyMessage(NSLocalizedString("", comment: ""))
     }
